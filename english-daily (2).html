@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="English Daily">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1A1714">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231A1714'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23A8C5B5' font-family='Georgia,serif' font-style='italic'%3EE%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Daily</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F7F5F0;--surface:#FFFFFF;--border:#E2DDD6;--text:#1A1714;--muted:#7A7570;
+  --accent:#2A6049;--accent-light:#EAF3EE;--blue:#1A3A5C;--blue-light:#EBF1F8;
+  --amber:#92600A;--amber-light:#FDF4E3;--red-light:#FEF0F0;--red:#9A2020;
+  --tag-informal-bg:#F8EBF3;--tag-informal:#5C1A3A;
+  --tag-formal-bg:#EBF1F8;--tag-formal:#1A3A5C;
+  --tag-neutro-bg:#EBF8EB;--tag-neutro:#3A5C1A;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:4rem;}
+header{background:var(--text);color:#F7F5F0;padding:1.25rem 2rem;display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.5rem;}
+.logo{font-family:'Playfair Display',serif;font-size:1.5rem;letter-spacing:-.02em;}
+.logo em{font-style:italic;color:#A8C5B5;}
+.date-badge{font-family:'DM Mono',monospace;font-size:.75rem;color:#A8A09A;letter-spacing:.08em;text-transform:uppercase;}
+nav{display:flex;gap:0;padding:0 2rem;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;}
+.tab-btn{font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:2.5px solid transparent;padding:1rem 1.25rem;cursor:pointer;white-space:nowrap;transition:color .2s,border-color .2s;}
+.tab-btn.active{color:var(--text);border-bottom-color:var(--text);}
+.tab-btn:hover:not(.active){color:var(--text);}
+main{max-width:760px;margin:0 auto;padding:2rem 1.25rem;}
+.tab-panel{display:none;}.tab-panel.active{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:1rem;}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.item-title{font-family:'Playfair Display',serif;font-size:2.25rem;font-weight:600;line-height:1.1;letter-spacing:-.02em;}
+.item-subtitle{font-size:1rem;color:var(--muted);margin-top:.35rem;font-weight:300;}
+.badge{display:inline-block;font-size:.7rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;padding:.3rem .75rem;border-radius:99px;flex-shrink:0;margin-top:.5rem;}
+.badge-informal{background:var(--tag-informal-bg);color:var(--tag-informal);}
+.badge-formal{background:var(--tag-formal-bg);color:var(--tag-formal);}
+.badge-neutro{background:var(--tag-neutro-bg);color:var(--tag-neutro);}
+.badge-amber{background:var(--amber-light);color:var(--amber);}
+.section-label{font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;margin-top:1.5rem;}
+.context-box{background:var(--bg);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.85rem 1rem;font-size:.9rem;line-height:1.6;}
+.examples-list{list-style:none;display:flex;flex-direction:column;gap:.75rem;}
+.example-item{background:var(--bg);border-radius:10px;padding:.85rem 1rem;}
+.example-en{font-size:.95rem;font-weight:500;line-height:1.5;}
+.example-en em{font-family:'Playfair Display',serif;font-style:italic;color:var(--accent);}
+.example-es{font-size:.82rem;color:var(--muted);margin-top:.25rem;line-height:1.4;}
+.tip-box{background:var(--accent-light);border-radius:10px;padding:.85rem 1rem;font-size:.88rem;line-height:1.6;color:var(--accent);}
+.day-indicator{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--muted);margin-bottom:.5rem;}
+
+/* MODAL PANORAMIC */
+.modal-grid{display:flex;flex-direction:column;gap:1rem;}
+.modal-row{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.modal-row-header{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.25rem;cursor:pointer;user-select:none;}
+.modal-row-header:hover{background:var(--bg);}
+.modal-name{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;min-width:90px;}
+.modal-es{font-size:.85rem;color:var(--muted);flex:1;line-height:1.4;}
+.modal-prob-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:110px;}
+.modal-prob-num{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--amber);font-weight:500;}
+.modal-bar-bg{height:5px;background:var(--border);border-radius:99px;width:100px;overflow:hidden;}
+.modal-bar-fill{height:100%;border-radius:99px;background:var(--accent);}
+.modal-chevron{font-size:.8rem;color:var(--muted);transition:transform .25s;margin-left:.5rem;}
+.modal-row.open .modal-chevron{transform:rotate(180deg);}
+.modal-detail{display:none;border-top:1px solid var(--border);padding:1.25rem;}
+.modal-row.open .modal-detail{display:block;}
+.prob-label-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:.4rem;}
+.prob-label-row strong{color:var(--accent);}
+.full-bar-bg{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:1rem;}
+.full-bar-fill{height:100%;border-radius:99px;background:var(--accent);}
+.compare-box{border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;font-size:.88rem;line-height:1.7;margin-bottom:.75rem;}
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem;}
+.rule-card{border-radius:10px;padding:.85rem 1rem;font-size:.85rem;line-height:1.6;}
+.rule-si{background:var(--accent-light);}.rule-no{background:var(--red-light);}
+.rule-card strong{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.35rem;}
+.rule-si strong{color:var(--accent);}.rule-no strong{color:var(--red);}
+
+/* TENSE */
+.formula-box{font-family:'DM Mono',monospace;font-size:.9rem;background:var(--text);color:#A8C5B5;border-radius:10px;padding:.85rem 1.25rem;letter-spacing:.02em;}
+.tense-table{width:100%;border-collapse:collapse;font-size:.85rem;}
+.tense-table th{text-align:left;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:.5rem .75rem;border-bottom:1px solid var(--border);}
+.tense-table td{padding:.65rem .75rem;border-bottom:1px solid var(--bg);line-height:1.5;vertical-align:top;}
+.tense-table tr:last-child td{border-bottom:none;}
+.tense-table td:first-child{font-weight:500;color:var(--accent);font-size:.78rem;letter-spacing:.04em;}
+.error-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;}
+.error-item{display:flex;gap:.75rem;align-items:flex-start;font-size:.88rem;line-height:1.5;}
+.error-icon{color:var(--red);flex-shrink:0;font-size:.75rem;margin-top:3px;}
+.anchor-box{background:var(--blue-light);border-radius:10px;padding:.85rem 1rem;font-size:.88rem;line-height:1.6;color:var(--blue);}
+.tense-nav{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;}
+.tense-nav-btn{font-size:.78rem;font-weight:500;padding:.4rem .9rem;border-radius:99px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--muted);transition:all .2s;}
+.tense-nav-btn.active{background:var(--text);color:#F7F5F0;border-color:var(--text);}
+.tense-nav-btn:hover:not(.active){background:var(--surface);color:var(--text);}
+.cond-section{margin-top:1.25rem;}
+.cond-block{background:var(--bg);border-radius:10px;padding:1rem;margin-bottom:.75rem;}
+.cond-block-title{font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem;}
+.cond-formula{font-family:'DM Mono',monospace;font-size:.82rem;color:var(--text);margin-bottom:.5rem;background:var(--surface);padding:.5rem .75rem;border-radius:6px;border:1px solid var(--border);}
+.cond-ex{font-size:.88rem;line-height:1.6;margin-bottom:.25rem;}
+.cond-ex-es{font-size:.8rem;color:var(--muted);}
+
+@media(max-width:520px){
+  main{padding:1.25rem 1rem;}.card{padding:1.25rem;}
+  .item-title{font-size:1.75rem;}.rule-grid{grid-template-columns:1fr;}
+  .modal-prob-wrap{min-width:80px;}.modal-bar-bg{width:70px;}
+}
+
+.progress-bar-wrap{margin-bottom:1.25rem;}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;}
+.progress-label{font-size:.75rem;color:var(--muted);}
+.progress-count{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--accent);font-weight:500;}
+.progress-bg{height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:99px;background:var(--accent);transition:width .4s ease;}
+.day-meta{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);margin-bottom:1rem;line-height:1.6;}
+.reset-btn{font-size:.72rem;color:#9A2020;background:none;border:none;cursor:pointer;text-decoration:underline;padding:0;margin-top:.25rem;display:block;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">English <em>Daily</em></div>
+  <div class="date-badge" id="date-display"></div>
+</header>
+
+<nav>
+  <button class="tab-btn active" onclick="switchTab('phrasal',this)">Phrasal Verb</button>
+  <button class="tab-btn" onclick="switchTab('modal',this)">Modales</button>
+  <button class="tab-btn" onclick="switchTab('tense',this)">Tiempos verbales</button>
+</nav>
+
+<main>
+  <div class="tab-panel active" id="tab-phrasal">
+    <div class="card" id="phrasal-card"></div>
+  </div>
+  <div class="tab-panel" id="tab-modal">
+    <div class="modal-grid" id="modal-grid"></div>
+  </div>
+  <div class="tab-panel" id="tab-tense">
+    <div class="tense-nav" id="tense-nav"></div>
+    <div class="card" id="tense-card"></div>
+  </div>
+</main>
+
+<script>
+// ─── DATE ───────────────────────────────────────────────────────────────────
+const DAYS_ES=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const MONTHS_ES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const now=new Date();
+const todayStr=now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
+document.getElementById('date-display').textContent=
+  DAYS_ES[now.getDay()]+' '+now.getDate()+' de '+MONTHS_ES[now.getMonth()]+' '+now.getFullYear();
+
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── PHRASAL VERBS (30 items, 1 per day by date) ────────────────────────────
+const phrasalData=[
+  {phrase:'give up',es:'rendirse / abandonar',register:'informal',
+   context:'Se usa cuando alguien deja de intentar algo por frustración o convicción. Muy común en conversaciones cotidianas, motivación personal y redes sociales.',
+   examples:[
+     {en:'Don\'t <em>give up</em> on your dreams, even when it gets hard.',es:'No te rindas con tus sueños, incluso cuando se ponga difícil.'},
+     {en:'She finally <em>gave up</em> trying to fix the printer and called IT.',es:'Finalmente se rindió tratando de arreglar la impresora y llamó a soporte.'},
+     {en:'I\'m not going to <em>give up</em> just because one client said no.',es:'No voy a rendirme solo porque un cliente dijo que no.'}
+   ],
+   tip:'Piensa en give (dar) + up (arriba) → soltar hacia arriba = dejar ir. Lo opuesto es "keep going" o "persist".',
+   extra:'También se usa como sustantivo: "That attitude is a recipe for a total give-up mentality." Combinación frecuente: "give up on someone" (rendirse con alguien).'
+  },
+  {phrase:'look into',es:'investigar / examinar a fondo',register:'neutro',
+   context:'Ideal para contextos laborales y académicos. Se usa cuando alguien va a revisar o analizar un asunto más a fondo. Muy profesional y versátil.',
+   examples:[
+     {en:'I\'ll <em>look into</em> the issue and get back to you by Friday.',es:'Revisaré el tema y te respondo el viernes.'},
+     {en:'The manager promised to <em>look into</em> the salary discrepancy.',es:'La gerente prometió investigar la discrepancia salarial.'},
+     {en:'We\'re <em>looking into</em> new suppliers to reduce costs.',es:'Estamos investigando nuevos proveedores para reducir costos.'}
+   ],
+   tip:'"Look into" = meter la vista dentro de algo → examinar a fondo. No confundir con "look at" (solo mirar superficialmente).',
+   extra:'En reuniones de trabajo, "I\'ll look into it" es la respuesta perfecta cuando no tienes la información en el momento pero te comprometes a conseguirla.'
+  },
+  {phrase:'run out of',es:'quedarse sin / agotar',register:'neutro',
+   context:'Se usa cuando algo se acaba o no hay más disponible. Aplica para cosas físicas (dinero, comida) y abstractas (tiempo, ideas, paciencia).',
+   examples:[
+     {en:'We <em>ran out of</em> coffee in the office, so everyone\'s cranky.',es:'Se nos acabó el café en la oficina, así que todos están de mal humor.'},
+     {en:'I\'m <em>running out of</em> time to finish this report.',es:'Se me está acabando el tiempo para terminar este informe.'},
+     {en:'Don\'t <em>run out of</em> battery during the presentation.',es:'No te quedes sin batería durante la presentación.'}
+   ],
+   tip:'"Run out" = correr hacia afuera → el stock sale corriendo. Siempre va seguido de "of" cuando nombras qué se agotó.',
+   extra:'Errores comunes: "I ran out money" → siempre necesita "of": "I ran out of money". No puede usarse en pasiva: no digas "money was run out".'
+  },
+  {phrase:'bring up',es:'mencionar / sacar a colación',register:'neutro',
+   context:'Se usa en conversaciones y reuniones cuando alguien introduce un tema que no estaba en la agenda. También significa "criar hijos" en otro contexto distinto.',
+   examples:[
+     {en:'Can I <em>bring up</em> something before we close the meeting?',es:'¿Puedo mencionar algo antes de cerrar la reunión?'},
+     {en:'She <em>brought up</em> the budget issue right before the deadline.',es:'Ella sacó el tema del presupuesto justo antes de la fecha límite.'},
+     {en:'Try not to <em>bring up</em> politics at the family dinner.',es:'Trata de no sacar el tema de política en la cena familiar.'}
+   ],
+   tip:'"Bring up" = traer hacia arriba → traer a la superficie un tema que estaba "abajo". Sinónimo formal: "raise a point".',
+   extra:'Doble significado importante: "She was brought up in Santiago" = ella se crió en Santiago. El contexto siempre lo aclara: si hablas de personas jóvenes = criar; si hablas de temas = mencionar.'
+  },
+  {phrase:'figure out',es:'descubrir / resolver / entender',register:'informal',
+   context:'Muy común en inglés americano. Se usa cuando alguien logra entender algo confuso o resolver un problema. Frecuentísimo en tecnología, trabajo y vida diaria.',
+   examples:[
+     {en:'I finally <em>figured out</em> how to use the new software.',es:'Por fin entendí cómo usar el nuevo software.'},
+     {en:'We need to <em>figure out</em> why sales dropped last quarter.',es:'Necesitamos descubrir por qué bajaron las ventas el trimestre pasado.'},
+     {en:'I can\'t <em>figure out</em> what she meant by that comment.',es:'No puedo entender qué quiso decir con ese comentario.'}
+   ],
+   tip:'"Figure" en inglés antiguo = forma → darle forma a algo en tu mente = entenderlo. Sinónimo formal: "determine", "identify", "work out".',
+   extra:'"Work out" es casi sinónimo pero más común en inglés británico: "I\'m still trying to work out how this happened." Ambos son igualmente válidos en contextos profesionales.'
+  },
+  {phrase:'carry on',es:'continuar / seguir adelante',register:'formal',
+   context:'Más común en inglés británico pero entendido globalmente. Se usa para decir que algo debe continuar a pesar de obstáculos. Tono serio y resolutivo.',
+   examples:[
+     {en:'Please <em>carry on</em> with your presentation; I\'ll join in a moment.',es:'Por favor continúa con tu presentación; me uno en un momento.'},
+     {en:'Despite the setback, the team <em>carried on</em> with the launch.',es:'A pesar del contratiempo, el equipo siguió adelante con el lanzamiento.'},
+     {en:'<em>Carry on</em> — we\'ll address those questions at the end.',es:'Continúa — abordaremos esas preguntas al final.'}
+   ],
+   tip:'Famoso por el póster británico WWII: "Keep Calm and Carry On". Más formal y serio que "keep going" o "go on".',
+   extra:'"Carry on" puede sonar anticuado en inglés americano casual. Para conversaciones informales, prefiere "keep going" o "go ahead". En correos formales, "carry on" funciona perfectamente.'
+  },
+  {phrase:'put off',es:'posponer / aplazar / procrastinar',register:'informal',
+   context:'Se usa cuando algo se retrasa, ya sea voluntariamente (procrastinar) o por circunstancias externas. También puede significar "desanimar" o "disgustar" en otro contexto.',
+   examples:[
+     {en:'Stop <em>putting off</em> that doctor\'s appointment — call today.',es:'Deja de postergar esa cita médica — llama hoy.'},
+     {en:'The meeting was <em>put off</em> until next week due to the storm.',es:'La reunión fue aplazada hasta la próxima semana por la tormenta.'},
+     {en:'I\'ve been <em>putting off</em> learning Excel for months.',es:'He estado postergando aprender Excel por meses.'}
+   ],
+   tip:'Imagina "put" (poner) + "off" (apagado) → apagar algo temporalmente, dejarlo para después. Sinónimo formal: "postpone", "defer".',
+   extra:'Segundo significado: "That smell puts me off my food" = ese olor me quita el apetito / me desanima. "She was put off by his attitude" = su actitud la desanimó. El contexto lo diferencia.'
+  },
+  {phrase:'come across',es:'encontrarse con / causar impresión de',register:'neutro',
+   context:'Tiene dos usos: (1) encontrar algo por casualidad, (2) causar cierta impresión en los demás. El contexto lo aclara siempre. Muy útil en entrevistas y presentaciones.',
+   examples:[
+     {en:'I <em>came across</em> an interesting article about remote work this morning.',es:'Me encontré con un artículo interesante sobre trabajo remoto esta mañana.'},
+     {en:'In the interview, try not to <em>come across</em> as arrogant.',es:'En la entrevista, trata de no dar la impresión de ser arrogante.'},
+     {en:'She <em>comes across</em> as very confident in meetings.',es:'Ella da la impresión de ser muy segura en las reuniones.'}
+   ],
+   tip:'Doble función: accidental + percepción. Personas → impresión. Objetos/ideas → encontrar por casualidad.',
+   extra:'"How do I come across in this email?" es una pregunta muy práctica para pedir feedback sobre el tono de un texto. También: "come across as genuine" = parecer genuino/auténtico.'
+  },
+  {phrase:'take over',es:'hacerse cargo / tomar control / adquirir',register:'neutro',
+   context:'Se usa en negocios (adquisición de empresa), trabajo (asumir responsabilidad) y conversaciones (dominar el turno). Muy frecuente en contextos corporativos y noticias.',
+   examples:[
+     {en:'She\'ll <em>take over</em> as project lead while I\'m on leave.',es:'Ella se hará cargo como líder del proyecto mientras estoy de licencia.'},
+     {en:'The startup was <em>taken over</em> by a larger tech company.',es:'La startup fue adquirida por una empresa tecnológica más grande.'},
+     {en:'Don\'t let negative thoughts <em>take over</em> — refocus.',es:'No dejes que los pensamientos negativos tomen control — reenfócate.'}
+   ],
+   tip:'"Take over" = tomar por encima → escalar hasta quedar al mando. El sustantivo "takeover" (sin espacio) se usa en noticias: "hostile takeover".',
+   extra:'"Take over from" = reemplazar a alguien específico: "He took over from the previous manager last March." El "from" indica el traspaso concreto de responsabilidad.'
+  },
+  {phrase:'set up',es:'configurar / establecer / fundar / montar',register:'neutro',
+   context:'Uno de los phrasal verbs más versátiles. Aplica para tecnología (configurar), negocios (fundar), espacios (montar) y personas (presentar a alguien / tender una trampa).',
+   examples:[
+     {en:'Can you help me <em>set up</em> the projector before the clients arrive?',es:'¿Me puedes ayudar a instalar el proyector antes de que lleguen los clientes?'},
+     {en:'They <em>set up</em> a new branch office in Santiago last year.',es:'Abrieron una nueva sucursal en Santiago el año pasado.'},
+     {en:'I need to <em>set up</em> my new phone — it\'s still in factory mode.',es:'Necesito configurar mi nuevo teléfono — todavía está en modo de fábrica.'}
+   ],
+   tip:'"Set up" = poner en su sitio → preparar algo para que funcione. El sustantivo "setup" (sin espacio) es la configuración resultante.',
+   extra:'Tercer significado informal: "He was set up" = le tendieron una trampa. En tecnología, "setup wizard" = asistente de configuración. Muy productivo en inglés corporativo.'
+  },
+  {phrase:'follow up',es:'hacer seguimiento / dar continuidad',register:'neutro',
+   context:'Imprescindible en el mundo laboral. Se usa cuando alguien vuelve a contactar a otra persona para revisar el estado de algo pendiente. Muy frecuente en correos.',
+   examples:[
+     {en:'I\'m <em>following up</em> on my email from last week — any update?',es:'Estoy haciendo seguimiento a mi correo de la semana pasada — ¿alguna novedad?'},
+     {en:'Please <em>follow up</em> with the supplier about the delivery date.',es:'Por favor haz seguimiento con el proveedor sobre la fecha de entrega.'},
+     {en:'We\'ll <em>follow up</em> after the meeting to confirm the next steps.',es:'Haremos seguimiento después de la reunión para confirmar los próximos pasos.'}
+   ],
+   tip:'"Follow up" = seguir hacia arriba → mantener el hilo. El sustantivo "follow-up" (con guión): "a follow-up email", "a follow-up meeting".',
+   extra:'La frase "Just following up" al inicio de un correo es la forma más común y cortés de recordar algo pendiente sin sonar insistente en inglés profesional.'
+  },
+  {phrase:'break down',es:'descomponerse / desglosar / derrumbarse',register:'neutro',
+   context:'Triple significado: (1) una máquina deja de funcionar, (2) analizar algo en partes, (3) una persona pierde el control emocional. El contexto lo diferencia.',
+   examples:[
+     {en:'The car <em>broke down</em> on the highway — we had to call a tow truck.',es:'El auto se descompuso en la autopista — tuvimos que llamar a una grúa.'},
+     {en:'Can you <em>break down</em> the costs for us? We need the detail.',es:'¿Puedes desglosar los costos? Necesitamos el detalle.'},
+     {en:'She <em>broke down</em> when she heard the news.',es:'Ella se derrumbó cuando escuchó la noticia.'}
+   ],
+   tip:'Recuerda los 3 contextos: máquina = avería, datos = desglosar, personas = crisis emocional. El sustantivo: "breakdown" (sin espacio).',
+   extra:'"Have a breakdown" = sufrir una crisis. "A breakdown of costs" = un desglose de costos. "The negotiation broke down" = las negociaciones fracasaron. Muy rico en contextos distintos.'
+  },
+  {phrase:'point out',es:'señalar / hacer notar / indicar',register:'neutro',
+   context:'Se usa para llamar la atención sobre algo que otros pueden no haber notado. Es una forma educada y directa de introducir una observación o corrección.',
+   examples:[
+     {en:'I\'d like to <em>point out</em> that the deadline was already extended twice.',es:'Me gustaría señalar que el plazo ya se extendió dos veces.'},
+     {en:'She <em>pointed out</em> several errors in the first draft.',es:'Ella señaló varios errores en el primer borrador.'},
+     {en:'As the report <em>points out</em>, customer satisfaction dropped in Q2.',es:'Como señala el informe, la satisfacción del cliente cayó en el segundo trimestre.'}
+   ],
+   tip:'"Point out" = apuntar hacia afuera → mostrarle algo a alguien. Más educado que simplemente "say" cuando corriges o adviertes algo.',
+   extra:'"It\'s worth pointing out that..." es una construcción muy útil en presentaciones y correos formales para introducir una observación importante sin sonar confrontacional.'
+  },
+  {phrase:'deal with',es:'lidiar con / manejar / encargarse de',register:'neutro',
+   context:'Se usa para hablar de cómo alguien enfrenta problemas, situaciones difíciles o tareas pendientes. Es una de las combinaciones más frecuentes en inglés profesional.',
+   examples:[
+     {en:'I\'ll <em>deal with</em> the client complaint first thing tomorrow.',es:'Me encargaré de la queja del cliente a primera hora mañana.'},
+     {en:'How do you usually <em>deal with</em> stress at work?',es:'¿Cómo manejas normalmente el estrés en el trabajo?'},
+     {en:'We need someone who can <em>deal with</em> difficult suppliers.',es:'Necesitamos a alguien que pueda lidiar con proveedores difíciles.'}
+   ],
+   tip:'"Deal with" = hacer un trato con → negociar la situación hasta resolverla. Más activo que "handle" en contextos emocionales.',
+   extra:'"Deal with it" (imperativo informal) puede sonar agresivo. En contextos formales, prefiere "address the issue" o "manage the situation" para mayor diplomacia.'
+  },
+  {phrase:'turn out',es:'resultar ser / salir (de una forma inesperada)',register:'neutro',
+   context:'Se usa para expresar cómo resultó algo, especialmente cuando el resultado es diferente a lo esperado. Expresa descubrimiento o revelación de un resultado.',
+   examples:[
+     {en:'The project <em>turned out</em> better than we expected.',es:'El proyecto resultó mejor de lo que esperábamos.'},
+     {en:'It <em>turns out</em> the file was saved in the wrong folder.',es:'Resulta que el archivo se guardó en la carpeta equivocada.'},
+     {en:'How did the presentation <em>turn out</em>?',es:'¿Cómo salió la presentación?'}
+   ],
+   tip:'"Turn out" = girar hacia afuera → revelar lo que había adentro. "It turns out..." es la forma más natural de decir "resulta que..." en inglés.',
+   extra:'"As it turned out" es una frase conector muy útil en narrativas: "As it turned out, the decision was the right one after all." Expresa retrospección elegante.'
+  },
+  {phrase:'go through',es:'pasar por / revisar / atravesar',register:'neutro',
+   context:'Tres usos principales: (1) experimentar algo difícil, (2) revisar algo detalladamente, (3) completar un proceso. Muy frecuente en contextos laborales y personales.',
+   examples:[
+     {en:'She\'s <em>going through</em> a tough time — be patient with her.',es:'Está pasando por un momento difícil — ten paciencia con ella.'},
+     {en:'Let\'s <em>go through</em> the agenda before the meeting starts.',es:'Revisemos la agenda antes de que empiece la reunión.'},
+     {en:'The deal didn\'t <em>go through</em> — the client backed out.',es:'El trato no se concretó — el cliente se echó atrás.'}
+   ],
+   tip:'"Go through" = pasar a través → atravesar algo de principio a fin. Sinónimos: "experience" (emocional), "review" (revisar), "be approved" (proceso).',
+   extra:'"Go through with something" = llevar algo a cabo a pesar de las dudas: "Are you going to go through with the merger?" Añade la partícula "with" para completar esta acción.'
+  },
+  {phrase:'make up',es:'inventar / reconciliarse / compensar / maquillarse',register:'informal',
+   context:'Uno de los phrasal verbs con más acepciones. El contexto es clave: inventar historias, reconciliarse tras una pelea, compensar tiempo perdido o aplicar maquillaje.',
+   examples:[
+     {en:'He <em>made up</em> an excuse for being late — nobody believed him.',es:'Inventó una excusa por llegar tarde — nadie le creyó.'},
+     {en:'They had a fight, but they <em>made up</em> the next morning.',es:'Tuvieron una pelea, pero se reconciliaron a la mañana siguiente.'},
+     {en:'I need to <em>make up</em> for the time I lost during the holiday.',es:'Necesito compensar el tiempo que perdí durante las vacaciones.'}
+   ],
+   tip:'4 significados clave: inventar → "make up a story"; reconciliar → "make up after a fight"; compensar → "make up for"; maquillar → "make up your face".',
+   extra:'"Make it up to someone" = resarcir a alguien: "I\'m sorry I missed your birthday — I\'ll make it up to you." Es una frase de disculpa muy natural y frecuente.'
+  },
+  {phrase:'take on',es:'asumir / contratar / enfrentarse a',register:'neutro',
+   context:'Se usa cuando alguien acepta una nueva responsabilidad, contrata personal o se enfrenta a un desafío o competidor. Muy común en contextos corporativos.',
+   examples:[
+     {en:'She <em>took on</em> three new clients this quarter — impressive.',es:'Asumió tres nuevos clientes este trimestre — impresionante.'},
+     {en:'We\'re planning to <em>take on</em> two junior developers next month.',es:'Planeamos contratar dos desarrolladores junior el próximo mes.'},
+     {en:'Are you sure you want to <em>take on</em> that competitor? They\'re huge.',es:'¿Estás seguro de que quieres enfrentarte a ese competidor? Son enormes.'}
+   ],
+   tip:'"Take on" = tomar encima → cargar con algo o alguien. Puede usarse con trabajo (asumir), personas (contratar) o rivales (enfrentarse).',
+   extra:'"Don\'t take on too much at once" = no te sobrecargues. Expresión de advertencia muy frecuente para quienes tienen tendencia a comprometerse en exceso.'
+  },
+  {phrase:'work out',es:'funcionar / resolver / hacer ejercicio / calcular',register:'neutro',
+   context:'Muy versátil: (1) algo funciona o resulta bien, (2) resolver un problema, (3) hacer ejercicio físico, (4) calcular o deducir. Muy frecuente en inglés británico.',
+   examples:[
+     {en:'I hope this new strategy <em>works out</em> for the team.',es:'Espero que esta nueva estrategia funcione para el equipo.'},
+     {en:'We need to <em>work out</em> the logistics before we commit.',es:'Necesitamos resolver la logística antes de comprometernos.'},
+     {en:'She <em>works out</em> every morning before logging in.',es:'Ella hace ejercicio todas las mañanas antes de conectarse.'}
+   ],
+   tip:'"Work out" = trabajar hacia afuera → resolver algo sacándolo de la cabeza, o trabajar el cuerpo. El sustantivo "workout" = sesión de ejercicio.',
+   extra:'"I can\'t work out why..." = No entiendo por qué... Muy útil en inglés británico para expresar confusión de forma educada sin sonar molesto.'
+  },
+  {phrase:'catch up',es:'ponerse al día / alcanzar',register:'informal',
+   context:'Se usa cuando alguien necesita ponerse al día con trabajo, noticias o amigos. También se usa para alcanzar a alguien que va adelante (literal o figurado).',
+   examples:[
+     {en:'I missed Monday\'s meeting — can someone <em>catch me up</em>?',es:'Perdí la reunión del lunes — ¿alguien me puede poner al día?'},
+     {en:'Let\'s have coffee and <em>catch up</em> — it\'s been months!',es:'Tomemos un café y pongámonos al día — ¡han sido meses!'},
+     {en:'If we don\'t speed up, the competition will <em>catch up</em> fast.',es:'Si no aceleramos, la competencia nos alcanzará rápido.'}
+   ],
+   tip:'"Catch up" = atrapar hacia arriba → llegar al mismo nivel que los demás. El sustantivo "catch-up" o "catch-up call" = llamada de actualización.',
+   extra:'"Catch-up meeting" es un término muy común en el trabajo para reuniones informales de actualización. "Let\'s schedule a quick catch-up" suena más natural que "update meeting" en muchos contextos.'
+  },
+  {phrase:'back up',es:'respaldar / hacer copia de seguridad / apoyar / retroceder',register:'neutro',
+   context:'En tecnología: hacer backup. En conversación: apoyar la postura de alguien. En tráfico: retroceder. Tres contextos muy distintos con la misma estructura.',
+   examples:[
+     {en:'Always <em>back up</em> your files before updating the software.',es:'Siempre haz una copia de seguridad de tus archivos antes de actualizar el software.'},
+     {en:'Can you <em>back me up</em> in the meeting? I need support on this.',es:'¿Me puedes respaldar en la reunión? Necesito apoyo en esto.'},
+     {en:'<em>Back up</em> the car — there\'s more space on the left.',es:'Retrocede el auto — hay más espacio a la izquierda.'}
+   ],
+   tip:'"Back up" = volver hacia atrás → en datos: volver a tener; en personas: dar un paso atrás para apoyar. El sustantivo "backup" = respaldo.',
+   extra:'"I\'ve got your back" es la versión más informal y emocional de "I\'ll back you up". El primero es apoyo personal; el segundo es apoyo en un argumento o situación concreta.'
+  },
+  {phrase:'fall behind',es:'quedarse atrás / atrasarse',register:'neutro',
+   context:'Se usa cuando alguien o algo no avanza al ritmo esperado, ya sea en trabajo, estudios, pagos o compromisos. Tiene connotación de rezago involuntario.',
+   examples:[
+     {en:'We\'re <em>falling behind</em> on the timeline — we need to reassign tasks.',es:'Nos estamos atrasando en el cronograma — necesitamos reasignar tareas.'},
+     {en:'If you miss too many classes, you\'ll <em>fall behind</em> quickly.',es:'Si faltas a demasiadas clases, te quedarás atrás rápidamente.'},
+     {en:'He <em>fell behind</em> on his mortgage payments during the crisis.',es:'Se atrasó en los pagos de su hipoteca durante la crisis.'}
+   ],
+   tip:'"Fall behind" = caer detrás → perder el ritmo y quedar en una posición más baja que los demás. Lo opuesto es "catch up" (ponerse al día).',
+   extra:'"Fall behind schedule" es una expresión muy común en gestión de proyectos. "We\'re slightly behind schedule but on track to recover" = estamos un poco atrasados pero en camino a recuperar.'
+  },
+  {phrase:'hold on',es:'esperar / aguantar / aferrarse',register:'informal',
+   context:'Se usa para pedir a alguien que espere brevemente. También significa aguantar en una situación difícil o aferrarse físicamente a algo. Muy frecuente en llamadas.',
+   examples:[
+     {en:'<em>Hold on</em> a second — I need to check something before we continue.',es:'Espera un segundo — necesito revisar algo antes de continuar.'},
+     {en:'<em>Hold on</em> tight — this is going to be a rough few months.',es:'Aguanta fuerte — van a ser unos meses difíciles.'},
+     {en:'<em>Hold on</em>, did you say the deadline is tomorrow?',es:'Espera, ¿dijiste que el plazo es mañana?'}
+   ],
+   tip:'"Hold on" = quedarse agarrado → en el tiempo: esperar; en situaciones: resistir. Más informal y urgente que "please wait" o "one moment".',
+   extra:'"Hold on" al inicio de una oración expresa sorpresa o necesidad de aclaración: "Hold on — that doesn\'t make sense." Equivale al "espera" o "un momento" del español coloquial.'
+  },
+  {phrase:'sort out',es:'resolver / organizar / aclarar',register:'neutro',
+   context:'Muy común en inglés británico. Se usa para resolver problemas, organizar situaciones caóticas o aclarar malentendidos. Es práctico y resolutivo en tono.',
+   examples:[
+     {en:'Let me <em>sort out</em> this scheduling conflict and come back to you.',es:'Déjame resolver este conflicto de agenda y te respondo.'},
+     {en:'We need to <em>sort out</em> who\'s responsible for the client onboarding.',es:'Necesitamos aclarar quién es responsable del onboarding del cliente.'},
+     {en:'She <em>sorted out</em> the entire filing system in one afternoon.',es:'Organizó todo el sistema de archivos en una tarde.'}
+   ],
+   tip:'"Sort out" = ordenar hacia afuera → sacar el desorden y dejarlo ordenado. Más activo y resolutivo que simplemente "fix" o "solve".',
+   extra:'"I\'ll sort it out" = me encargo / lo resuelvo. Muy usado en inglés británico como respuesta segura ante un problema. El equivalente americano más común sería "I\'ll take care of it".'
+  },
+  {phrase:'come up with',es:'idear / proponer / ocurrirse una idea',register:'neutro',
+   context:'Se usa cuando alguien genera una idea, solución o plan nuevo. Es el phrasal verb de la creatividad y la resolución de problemas. Muy frecuente en brainstormings.',
+   examples:[
+     {en:'We need to <em>come up with</em> a new marketing angle by Thursday.',es:'Necesitamos idear un nuevo ángulo de marketing para el jueves.'},
+     {en:'She <em>came up with</em> the solution in under five minutes.',es:'Ella propuso la solución en menos de cinco minutos.'},
+     {en:'I can\'t <em>come up with</em> a good name for this product.',es:'No se me ocurre un buen nombre para este producto.'}
+   ],
+   tip:'"Come up with" = venir hacia arriba con algo → hacer que una idea suba a la superficie de tu mente. No puede separarse: siempre va junto.',
+   extra:'"Come up with" es inseparable: no puedes decir "come an idea up with". Siempre el objeto va al final: "come up with a plan", "come up with an answer".'
+  },
+  {phrase:'put up with',es:'aguantar / tolerar / soportar',register:'informal',
+   context:'Se usa para expresar tolerancia hacia algo molesto o desagradable. Siempre implica una incomodidad que se acepta, a veces a regañadientes.',
+   examples:[
+     {en:'I can\'t <em>put up with</em> this level of noise in the open office.',es:'No puedo aguantar este nivel de ruido en la oficina abierta.'},
+     {en:'How do you <em>put up with</em> such a demanding client?',es:'¿Cómo aguantas a un cliente tan exigente?'},
+     {en:'She <em>put up with</em> the long commute for two years before moving.',es:'Aguantó el largo trayecto durante dos años antes de mudarse.'}
+   ],
+   tip:'"Put up with" = poner hacia arriba con → cargar con algo pesado hacia arriba. Siempre lleva objeto: "put up with it", nunca solo "put up with".',
+   extra:'Sinónimos: "tolerate" (formal), "stand" (informal): "I can\'t stand it". La diferencia: "tolerate" es neutro; "put up with" y "stand" implican que es difícil pero te aguantas.'
+  },
+  {phrase:'take up',es:'empezar / ocupar espacio/tiempo / retomar',register:'neutro',
+   context:'Se usa cuando alguien comienza una nueva actividad o hobby. También cuando algo consume espacio, tiempo o recursos. Muy versátil en contextos cotidianos.',
+   examples:[
+     {en:'I recently <em>took up</em> running — it\'s been great for my stress.',es:'Recientemente empecé a correr — ha sido genial para mi estrés.'},
+     {en:'These meetings <em>take up</em> half my day — I need to push back.',es:'Estas reuniones ocupan la mitad de mi día — necesito reducirlas.'},
+     {en:'We\'ll <em>take up</em> this discussion again at next month\'s review.',es:'Retomaremos esta discusión en la revisión del próximo mes.'}
+   ],
+   tip:'"Take up" = tomar hacia arriba → agarrar algo nuevo y levantarlo, o que algo ocupa espacio/tiempo. Tres usos con la misma lógica de apropiación.',
+   extra:'"I\'ll take you up on that offer" = acepto tu oferta / te tomo la palabra. Es una respuesta muy elegante cuando alguien te propone algo y decides aceptar.'
+  },
+  {phrase:'get away with',es:'salirse con la suya / escapar sin consecuencias',register:'informal',
+   context:'Se usa cuando alguien hace algo incorrecto o arriesgado y no sufre consecuencias. Puede sonar positivo (lo logré) o negativo (es injusto que no pague las consecuencias).',
+   examples:[
+     {en:'He submitted the report late and <em>got away with</em> it — the boss didn\'t notice.',es:'Entregó el informe tarde y se salió con la suya — el jefe no se dio cuenta.'},
+     {en:'You can\'t <em>get away with</em> vague answers in that interview.',es:'No puedes salirte con respuestas vagas en esa entrevista.'},
+     {en:'She <em>gets away with</em> everything because she\'s the director\'s favorite.',es:'Se sale con la suya en todo porque es la favorita del director.'}
+   ],
+   tip:'"Get away with" = escapar llevándose algo → llevarse una acción sin pagar el precio. Siempre implica algo que no debería quedar sin consecuencias.',
+   extra:'"You won\'t get away with it" = no te vas a salir con la tuya. Es una advertencia fuerte. En contextos legales: "He got away with fraud for years" = evadió la justicia durante años.'
+  },
+  {phrase:'look forward to',es:'esperar con ansias / tener ganas de',register:'neutro',
+   context:'Expresa anticipación positiva hacia algo futuro. Es imprescindible en correos formales al despedirse. Siempre va seguido de sustantivo o verbo en -ing, nunca infinitivo.',
+   examples:[
+     {en:'I\'m <em>looking forward to</em> meeting the new team next week.',es:'Tengo muchas ganas de conocer al nuevo equipo la próxima semana.'},
+     {en:'We <em>look forward to</em> your feedback on the proposal.',es:'Esperamos con ansias sus comentarios sobre la propuesta.'},
+     {en:'I\'m really <em>looking forward to</em> the long weekend.',es:'Tengo muchas ganas de que llegue el fin de semana largo.'}
+   ],
+   tip:'Regla crítica: después de "forward to" siempre va -ing o sustantivo. NUNCA infinitivo: "I look forward to HEAR from you" → ERROR. "I look forward to HEARING from you" → CORRECTO.',
+   extra:'"Looking forward to hearing from you" es la despedida de correo formal más usada en inglés profesional. Apréndetela de memoria — la usarás decenas de veces.'
+  }
+,
+  {phrase:"call off",es:"cancelar / suspender",register:"neutro",context:"Se usa para cancelar algo planeado. M\u00e1s enf\u00e1tico que simplemente cancel \u2014 implica que algo ya estaba en marcha.",examples:[{en:"We had to <em>call off</em> the launch due to a last-minute bug.",es:"Tuvimos que cancelar el lanzamiento por un bug de \u00faltimo minuto."},{en:"The outdoor event was <em>called off</em> because of heavy rain.",es:"El evento al aire libre fue suspendido por las fuertes lluvias."},{en:"She <em>called off</em> the meeting when she saw the agenda wasn't ready.",es:"Cancel\u00f3 la reuni\u00f3n cuando vio que la agenda no estaba lista."}],tip:"'Call off' = llamar para que se vayan = cancelar. Sin\u00f3nimo formal: cancel, scrap, abandon.",extra:"'Call off' es ligeramente m\u00e1s enf\u00e1tico que 'cancel' \u2014 implica que algo ya estaba en marcha antes de parar."},
+  {phrase:"draw up",es:"redactar / elaborar un documento formal",register:"formal",context:"Se usa cuando alguien prepara un documento formal: contrato, plan, lista, propuesta. Muy com\u00fan en contextos legales y empresariales.",examples:[{en:"The legal team will <em>draw up</em> the contract by end of week.",es:"El equipo legal redactar\u00e1 el contrato para fin de semana."},{en:"Let's <em>draw up</em> a plan before the next board meeting.",es:"Elaboremos un plan antes de la pr\u00f3xima reuni\u00f3n del directorio."},{en:"She was asked to <em>draw up</em> a shortlist of potential vendors.",es:"Le pidieron que preparara una lista corta de proveedores potenciales."}],tip:"'Draw up' = trazar hacia arriba = dar forma escrita a algo. Exclusivo para documentos y planes formales.",extra:"No confundir con 'draw up' literal (acercarse en veh\u00edculo). El contexto lo diferencia."},
+  {phrase:"lay off",es:"despedir por recorte / dejar en paz",register:"neutro",context:"En contextos laborales: despedir empleados por razones econ\u00f3micas (no disciplinarias). En conversaci\u00f3n informal: dejar de molestar.",examples:[{en:"The company had to <em>lay off</em> 200 workers due to budget cuts.",es:"La empresa tuvo que despedir a 200 trabajadores por recortes presupuestarios."},{en:"He was <em>laid off</em> after 12 years \u2014 it was a real shock.",es:"Fue despedido despu\u00e9s de 12 a\u00f1os \u2014 fue un golpe duro."},{en:"<em>Lay off</em> the coffee \u2014 you've had four cups already.",es:"Deja de tomar caf\u00e9 \u2014 ya tomaste cuatro tazas."}],tip:"'Lay off' \u2260 'fire'. 'Fire' = despido disciplinario. 'Lay off' = recorte por razones econ\u00f3micas.",extra:"El sustantivo 'layoff' es muy com\u00fan en noticias corporativas. 'Mass layoffs' = despidos masivos."},
+  {phrase:"take off",es:"despegar / quitarse / tener \u00e9xito repentino",register:"neutro",context:"Tres usos: (1) un avi\u00f3n despega, (2) quitarse ropa, (3) un proyecto o carrera despega repentinamente.",examples:[{en:"The flight <em>takes off</em> at 6 AM \u2014 don't be late.",es:"El vuelo despega a las 6 AM \u2014 no llegues tarde."},{en:"Please <em>take off</em> your shoes before entering.",es:"Por favor qu\u00edtate los zapatos antes de entrar."},{en:"Their podcast really <em>took off</em> after that viral episode.",es:"Su podcast realmente despeg\u00f3 despu\u00e9s de ese episodio viral."}],tip:"'Take off' = separarse del suelo \u2192 metaf\u00f3rico para \u00e9xito s\u00fabito. Sustantivo 'takeoff' en aviaci\u00f3n.",extra:"'Take some time off' = tomarse un tiempo libre. 'I'm taking Monday off' = no voy a trabajar el lunes."},
+  {phrase:"check in",es:"registrarse / hacer seguimiento / conectarse",register:"neutro",context:"En hoteles y aeropuertos: registrarse. En trabajo: breve reuni\u00f3n de seguimiento. En relaciones: preguntar c\u00f3mo est\u00e1 alguien.",examples:[{en:"We <em>check in</em> at 3 PM \u2014 the hotel is ready by then.",es:"Hacemos check-in a las 3 PM \u2014 el hotel est\u00e1 listo para entonces."},{en:"Let's <em>check in</em> on Friday to see where everyone is with their tasks.",es:"Revisemos el viernes para ver c\u00f3mo va cada uno con sus tareas."},{en:"She always <em>checks in</em> with her team before starting a new project.",es:"Ella siempre se conecta con su equipo antes de empezar un proyecto nuevo."}],tip:"'Check in' = verificar que llegaste o que est\u00e1s bien. Sustantivo: 'check-in' (con gui\u00f3n).",extra:"'A quick check-in' = reuni\u00f3n corta de seguimiento. Muy com\u00fan en metodolog\u00edas \u00e1giles y trabajo remoto."},
+  {phrase:"burn out",es:"agotarse / quemarse laboralmente",register:"neutro",context:"Se usa cuando alguien llega al l\u00edmite del agotamiento por sobrecarga de trabajo. Tambi\u00e9n una bombilla o motor que se quema.",examples:[{en:"If you keep working 12-hour days, you're going to <em>burn out</em>.",es:"Si sigues trabajando 12 horas al d\u00eda, te vas a quemar."},{en:"She <em>burned out</em> after the third consecutive product launch.",es:"Se quem\u00f3 despu\u00e9s del tercer lanzamiento de producto consecutivo."},{en:"The motor <em>burned out</em> \u2014 we need to replace it.",es:"El motor se quem\u00f3 \u2014 necesitamos reemplazarlo."}],tip:"'Burn out' = quemar hasta el l\u00edmite \u2192 no queda energ\u00eda. Sustantivo: 'burnout' = s\u00edndrome de agotamiento laboral.",extra:"'Burnout' es reconocido por la OMS como condici\u00f3n m\u00e9dica. Hablar de burnout abiertamente en el trabajo es cada vez m\u00e1s valorado."},
+  {phrase:"speak up",es:"hablar m\u00e1s fuerte / alzar la voz",register:"neutro",context:"Para pedir que alguien hable m\u00e1s fuerte, o metaf\u00f3rico: animar a alguien a expresar su opini\u00f3n o defender su postura.",examples:[{en:"Could you <em>speak up</em>? I can barely hear you from the back.",es:"\u00bfPuedes hablar m\u00e1s fuerte? Apenas te escucho desde atr\u00e1s."},{en:"Don't be afraid to <em>speak up</em> in meetings \u2014 your ideas matter.",es:"No tengas miedo de alzar la voz en las reuniones \u2014 tus ideas importan."},{en:"She finally <em>spoke up</em> about the unfair treatment.",es:"Finalmente alz\u00f3 la voz sobre el trato injusto."}],tip:"'Speak up' = hablar hacia arriba = proyectar la voz o las ideas. Puede ser literal o figurado.",extra:"'Speak up for someone' = defender a alguien: 'He spoke up for his colleague when no one else would.'"},
+  {phrase:"narrow down",es:"reducir / filtrar / acotar opciones",register:"neutro",context:"Se usa cuando se reduce un conjunto grande de opciones a una lista m\u00e1s peque\u00f1a. Muy com\u00fan en procesos de selecci\u00f3n y toma de decisiones.",examples:[{en:"We need to <em>narrow down</em> the candidates to three before Friday.",es:"Necesitamos reducir los candidatos a tres antes del viernes."},{en:"Can you <em>narrow down</em> the options? There are too many.",es:"\u00bfPuedes acotar las opciones? Hay demasiadas."},{en:"They've <em>narrowed down</em> the cause of the error to two possibilities.",es:"Han reducido la causa del error a dos posibilidades."}],tip:"'Narrow down' = estrechar hacia abajo = reducir el ancho de las opciones disponibles.",extra:"'Narrow it down' es instrucci\u00f3n com\u00fan en brainstormings: 'Let's narrow it down to our top 3.'"},
+  {phrase:"cut down on",es:"reducir / disminuir el consumo de algo",register:"neutro",context:"Se usa cuando alguien reduce la cantidad de algo que consume habitualmente. Muy com\u00fan para h\u00e1bitos: comida, caf\u00e9, gastos.",examples:[{en:"I'm trying to <em>cut down on</em> sugar \u2014 doctor's orders.",es:"Estoy tratando de reducir el az\u00facar \u2014 \u00f3rdenes del m\u00e9dico."},{en:"We need to <em>cut down on</em> unnecessary spending this quarter.",es:"Necesitamos reducir los gastos innecesarios este trimestre."},{en:"He <em>cut down on</em> meetings and productivity went up immediately.",es:"Redujo las reuniones y la productividad subi\u00f3 de inmediato."}],tip:"'Cut down on' = cortar hacia abajo = reducir gradualmente. No implica eliminar completamente.",extra:"'Cut back on' es sin\u00f3nimo casi exacto. 'Cut out' = eliminar completamente. Distinto grado de reducci\u00f3n."},
+  {phrase:"stand out",es:"destacar / sobresalir / llamar la atenci\u00f3n",register:"neutro",context:"Se usa cuando algo o alguien es notablemente diferente o superior a los dem\u00e1s. Positivo en la mayor\u00eda de contextos.",examples:[{en:"Her portfolio really <em>stands out</em> \u2014 she's clearly the top candidate.",es:"Su portafolio realmente destaca \u2014 claramente es la mejor candidata."},{en:"What makes your product <em>stand out</em> from the competition?",es:"\u00bfQu\u00e9 hace que tu producto se destaque de la competencia?"},{en:"He <em>stood out</em> as a natural leader from his first week.",es:"Sobresali\u00f3 como l\u00edder natural desde su primera semana."}],tip:"'Stand out' = pararse fuera del grupo = ser visible y notable. Lo opuesto: 'blend in' (pasar desapercibido).",extra:"'Stand-out' como adjetivo: 'a stand-out performance'. Muy usado en RRHH y marketing."},
+  {phrase:"wrap up",es:"concluir / terminar / resumir",register:"neutro",context:"Se usa para cerrar una reuni\u00f3n, conversaci\u00f3n, proyecto o presentaci\u00f3n. Tambi\u00e9n para envolver un regalo f\u00edsicamente.",examples:[{en:"Let's <em>wrap up</em> the meeting \u2014 we've covered everything.",es:"Cerremos la reuni\u00f3n \u2014 hemos cubierto todo."},{en:"I need one more hour to <em>wrap up</em> this deliverable.",es:"Necesito una hora m\u00e1s para terminar este entregable."},{en:"Could you <em>wrap up</em> your presentation with a summary?",es:"\u00bfPodr\u00edas concluir tu presentaci\u00f3n con un resumen?"}],tip:"'Wrap up' = envolver para cerrar \u2192 terminar algo limpiamente. Muy usado en reuniones y proyectos.",extra:"'That's a wrap!' es la expresi\u00f3n de cierre en sets de filmaci\u00f3n. En el trabajo: 'Let's call it a wrap for today.'"},
+  {phrase:"fill in",es:"rellenar / completar / informar a alguien",register:"neutro",context:"Dos usos: (1) completar un formulario, (2) informar a alguien de lo que se perdi\u00f3.",examples:[{en:"Please <em>fill in</em> this form before your appointment.",es:"Por favor rellena este formulario antes de tu cita."},{en:"Can someone <em>fill me in</em> on what happened in the meeting?",es:"\u00bfAlguien puede ponerme al tanto de lo que pas\u00f3 en la reuni\u00f3n?"},{en:"She <em>filled in</em> for the manager while he was on vacation.",es:"Ella cubri\u00f3 al gerente mientras estaba de vacaciones."}],tip:"'Fill in' = llenar los espacios vac\u00edos \u2192 en papel o en el conocimiento de alguien.",extra:"'Fill out' es sin\u00f3nimo de fill in para formularios (m\u00e1s com\u00fan en ingl\u00e9s americano)."},
+  {phrase:"pick up",es:"recoger / aprender / mejorar / acelerarse",register:"neutro",context:"Uno de los m\u00e1s polis\u00e9micos: recoger algo/alguien, aprender algo naturalmente, mejorar un ritmo, o retomar donde se dej\u00f3.",examples:[{en:"Can you <em>pick up</em> the kids from school today?",es:"\u00bfPuedes recoger a los ni\u00f1os del colegio hoy?"},{en:"She <em>picked up</em> Spanish in just six months living in Madrid.",es:"Aprendi\u00f3 espa\u00f1ol en solo seis meses viviendo en Madrid."},{en:"Sales are finally starting to <em>pick up</em> after a slow quarter.",es:"Las ventas finalmente est\u00e1n empezando a repuntar despu\u00e9s de un trimestre lento."}],tip:"'Pick up' = recoger literalmente o metaf\u00f3rico (aprender sin esfuerzo, mejorar gradualmente).",extra:"'Pick up where we left off' = retomar donde lo dejamos. Expresi\u00f3n muy \u00fatil en reuniones de seguimiento."},
+  {phrase:"bring about",es:"provocar / causar / generar un cambio",register:"formal",context:"Se usa para describir lo que caus\u00f3 o gener\u00f3 un resultado, especialmente cambios importantes. M\u00e1s formal que 'cause'.",examples:[{en:"The new policy <em>brought about</em> significant changes in the workflow.",es:"La nueva pol\u00edtica provoc\u00f3 cambios significativos en el flujo de trabajo."},{en:"What <em>brought about</em> this sudden shift in strategy?",es:"\u00bfQu\u00e9 caus\u00f3 este cambio repentino de estrategia?"},{en:"Technology has <em>brought about</em> a revolution in how we communicate.",es:"La tecnolog\u00eda ha generado una revoluci\u00f3n en c\u00f3mo nos comunicamos."}],tip:"'Bring about' = traer hacia la existencia = causar que algo ocurra. Sin\u00f3nimos: 'cause', 'lead to', 'result in'.",extra:"M\u00e1s formal y literario que 'cause'. Muy com\u00fan en textos acad\u00e9micos, informes y discursos."},
+  {phrase:"look up",es:"buscar informaci\u00f3n / mejorar / admirar a alguien",register:"neutro",context:"Tres usos: (1) buscar info en un diccionario o internet, (2) que las cosas mejoran, (3) admirar a alguien.",examples:[{en:"I didn't know the word, so I <em>looked it up</em> on my phone.",es:"No sab\u00eda la palabra, as\u00ed que la busqu\u00e9 en el tel\u00e9fono."},{en:"Things are finally <em>looking up</em> after a difficult year.",es:"Las cosas finalmente est\u00e1n mejorando despu\u00e9s de un a\u00f1o dif\u00edcil."},{en:"She really <em>looks up to</em> her mentor \u2014 she admires her deeply.",es:"Ella realmente admira a su mentora \u2014 la respeta profundamente."}],tip:"'Look up' = mirar hacia arriba \u2192 buscar en fuentes o sentir admiraci\u00f3n.",extra:"'Things are looking up' = expresi\u00f3n optimista para indicar que una situaci\u00f3n negativa est\u00e1 mejorando."},
+  {phrase:"put forward",es:"proponer / presentar / plantear",register:"formal",context:"Se usa para presentar formalmente una idea, propuesta o candidato. Muy com\u00fan en reuniones y debates.",examples:[{en:"She <em>put forward</em> an interesting proposal at the board meeting.",es:"Present\u00f3 una propuesta interesante en la reuni\u00f3n del directorio."},{en:"He was <em>put forward</em> as a candidate for the regional director position.",es:"Fue propuesto como candidato para el puesto de director regional."},{en:"Could you <em>put forward</em> your ideas before Thursday?",es:"\u00bfPodr\u00edas presentar tus ideas antes del jueves?"}],tip:"'Put forward' = poner hacia adelante = presentar algo al grupo. M\u00e1s formal que simplemente 'suggest'.",extra:"'Put forward a motion' = presentar una moci\u00f3n. 'Put someone forward' = nominar a alguien."},
+  {phrase:"branch out",es:"diversificarse / expandirse a algo nuevo",register:"neutro",context:"Se usa cuando una persona o empresa ampl\u00eda su campo hacia nuevas \u00e1reas. Met\u00e1fora de una rama que crece desde el tronco principal.",examples:[{en:"The company decided to <em>branch out</em> into the Latin American market.",es:"La empresa decidi\u00f3 expandirse al mercado latinoamericano."},{en:"After 10 years in finance, she <em>branched out</em> into tech consulting.",es:"Despu\u00e9s de 10 a\u00f1os en finanzas, se aventur\u00f3 en la consultor\u00eda tecnol\u00f3gica."},{en:"It's time to <em>branch out</em> \u2014 we can't rely on just one product.",es:"Es hora de diversificarse \u2014 no podemos depender de un solo producto."}],tip:"'Branch out' = crecer como una rama hacia nuevas direcciones. Implica expansi\u00f3n voluntaria y positiva.",extra:"Muy usado en conversaciones sobre carrera profesional y estrategia empresarial."},
+  {phrase:"drop off",es:"dejar a alguien / disminuir / dormirse",register:"neutro",context:"Tres usos: (1) dejar a alguien en un lugar, (2) una cantidad que disminuye, (3) quedarse dormido sin querer.",examples:[{en:"Can you <em>drop me off</em> at the airport on your way to work?",es:"\u00bfPuedes dejarme en el aeropuerto de camino al trabajo?"},{en:"Engagement <em>dropped off</em> significantly after the algorithm change.",es:"El engagement disminuy\u00f3 significativamente despu\u00e9s del cambio de algoritmo."},{en:"He <em>dropped off</em> during the long presentation \u2014 it was very late.",es:"Se qued\u00f3 dormido durante la larga presentaci\u00f3n \u2014 era muy tarde."}],tip:"'Drop off' = dejar caer = dejar en un lugar, o que algo cae gradualmente.",extra:"'Drop-off point' = punto de entrega. 'A drop-off in sales' = una ca\u00edda en las ventas."},
+  {phrase:"turn down",es:"rechazar / bajar el volumen",register:"neutro",context:"Dos usos: (1) rechazar una oferta o solicitud, (2) bajar el volumen o intensidad de algo.",examples:[{en:"She <em>turned down</em> the job offer \u2014 the salary wasn't competitive.",es:"Rechaz\u00f3 la oferta de trabajo \u2014 el salario no era competitivo."},{en:"Could you <em>turn down</em> the music? I'm on a call.",es:"\u00bfPodr\u00edas bajar la m\u00fasica? Estoy en una llamada."},{en:"His proposal was <em>turned down</em> by the committee.",es:"Su propuesta fue rechazada por el comit\u00e9."}],tip:"'Turn down' = girar hacia abajo \u2192 rechazar o bajar volumen.",extra:"Para rechazar educadamente: 'I'm afraid I'll have to turn down this offer' suena m\u00e1s diplom\u00e1tico que simplemente 'I reject'."},
+  {phrase:"scale up",es:"escalar / ampliar operaciones o producci\u00f3n",register:"neutro",context:"Se usa en negocios y tecnolog\u00eda para describir el crecimiento de operaciones o capacidad de forma estructurada.",examples:[{en:"We're ready to <em>scale up</em> production now that demand has stabilized.",es:"Estamos listos para escalar la producci\u00f3n ahora que la demanda se ha estabilizado."},{en:"The startup managed to <em>scale up</em> from 5 to 200 employees in two years.",es:"La startup logr\u00f3 escalar de 5 a 200 empleados en dos a\u00f1os."},{en:"The platform can <em>scale up</em> to handle millions of simultaneous users.",es:"La plataforma puede escalar para manejar millones de usuarios simult\u00e1neos."}],tip:"'Scale up' = crecer en escala = ampliar de forma proporcional y sostenida. Lo opuesto: 'scale down'.",extra:"'Scalability' = escalabilidad. 'Can it scale?' es una de las preguntas m\u00e1s importantes en tecnolog\u00eda."},
+  {phrase:"reach out",es:"contactar / comunicarse / tender la mano",register:"neutro",context:"Se usa cuando alguien toma la iniciativa de contactar a otra persona. Muy com\u00fan en LinkedIn y correos profesionales.",examples:[{en:"Feel free to <em>reach out</em> if you have any questions.",es:"No dudes en contactarme si tienes alguna pregunta."},{en:"She <em>reached out</em> to former colleagues for advice on the transition.",es:"Contact\u00f3 a excompa\u00f1eros para pedir consejo sobre la transici\u00f3n."},{en:"I'll <em>reach out</em> to the client and let you know what they say.",es:"Contactar\u00e9 al cliente y te digo qu\u00e9 dicen."}],tip:"'Reach out' = extender la mano hacia alguien = tomar la iniciativa de contactar.",extra:"En algunos contextos puede sonar corporativo. 'Get in touch' o 'contact' suena m\u00e1s natural en relaciones cercanas."},
+  {phrase:"step up",es:"dar un paso al frente / asumir m\u00e1s responsabilidad",register:"neutro",context:"Se usa cuando alguien asume mayor responsabilidad, especialmente en momentos cr\u00edticos. Tambi\u00e9n para describir mayor esfuerzo.",examples:[{en:"When the manager left, she <em>stepped up</em> and led the project herself.",es:"Cuando la gerente se fue, ella dio un paso al frente y lider\u00f3 el proyecto."},{en:"We need everyone to <em>step up</em> their game this quarter.",es:"Necesitamos que todos den un paso m\u00e1s este trimestre."},{en:"He really <em>stepped up</em> during the crisis \u2014 impressive leadership.",es:"Realmente se destac\u00f3 durante la crisis \u2014 liderazgo impresionante."}],tip:"'Step up' = subir un escal\u00f3n = avanzar hacia mayor responsabilidad o calidad.",extra:"'Step up to the plate' (del b\u00e9isbol) = estar a la altura de las circunstancias. Muy usada en ingl\u00e9s americano corporativo."},
+  {phrase:"cut off",es:"interrumpir / desconectar / aislar",register:"neutro",context:"Se usa cuando una conexi\u00f3n, comunicaci\u00f3n o suministro se interrumpe, voluntaria o involuntariamente.",examples:[{en:"The call <em>cut off</em> in the middle of the presentation \u2014 bad signal.",es:"La llamada se cort\u00f3 en medio de la presentaci\u00f3n \u2014 mala se\u00f1al."},{en:"She <em>cut him off</em> mid-sentence \u2014 she was in a hurry.",es:"Lo interrumpi\u00f3 a mitad de la oraci\u00f3n \u2014 ten\u00eda prisa."},{en:"The town was <em>cut off</em> from the mainland after the storm.",es:"El pueblo qued\u00f3 aislado del continente despu\u00e9s de la tormenta."}],tip:"'Cut off' = cortar el flujo \u2192 interrumpir una comunicaci\u00f3n, suministro o conexi\u00f3n.",extra:"'Feel cut off' = sentirse aislado. 'Cut off someone in traffic' = cerrarle el paso a alguien en la carretera."},
+  {phrase:"draw on",es:"aprovechar / basarse en / recurrir a",register:"formal",context:"Se usa cuando alguien aprovecha sus experiencias, conocimientos o recursos previos. M\u00e1s formal que 'use'.",examples:[{en:"In her speech, she <em>drew on</em> 20 years of experience in the field.",es:"En su discurso, se bas\u00f3 en 20 a\u00f1os de experiencia en el campo."},{en:"We'll need to <em>draw on</em> all available resources to meet this deadline.",es:"Necesitaremos aprovechar todos los recursos disponibles para cumplir este plazo."},{en:"The novel <em>draws on</em> real historical events from the 1940s.",es:"La novela se basa en eventos hist\u00f3ricos reales de los a\u00f1os 40."}],tip:"'Draw on' = sacar de una fuente = aprovechar algo que ya tienes. M\u00e1s elegante que 'use'.",extra:"Muy com\u00fan en textos acad\u00e9micos: 'Drawing on our research, we can conclude that...'"},
+  {phrase:"iron out",es:"resolver / aclarar / allanar dificultades",register:"neutro",context:"Se usa para describir el proceso de resolver peque\u00f1os problemas o detalles que quedan pendientes antes de que algo est\u00e9 listo.",examples:[{en:"We still need to <em>iron out</em> a few details before signing the contract.",es:"Todav\u00eda necesitamos resolver algunos detalles antes de firmar el contrato."},{en:"Let's <em>iron out</em> any miscommunications before the client calls.",es:"Resolvamos cualquier malentendido antes de la llamada con el cliente."},{en:"There are a few wrinkles to <em>iron out</em>, but we're almost there.",es:"Hay algunos detalles que resolver, pero ya casi llegamos."}],tip:"'Iron out' = planchar las arrugas = eliminar los problemas que 'arrugan' un plan.",extra:"Se usa para problemas peque\u00f1os o detalles finales. 'Iron out the kinks' es otra variante muy com\u00fan."},
+  {phrase:"map out",es:"trazar / planificar / delinear en detalle",register:"neutro",context:"Se usa cuando alguien planifica algo de forma detallada y sistem\u00e1tica, como una estrategia o un proyecto.",examples:[{en:"Before the project starts, let's <em>map out</em> the key milestones.",es:"Antes de que empiece el proyecto, tracemos los hitos clave."},{en:"She <em>mapped out</em> her career plan for the next five years.",es:"Ella traz\u00f3 su plan de carrera para los pr\u00f3ximos cinco a\u00f1os."},{en:"The team spent the afternoon <em>mapping out</em> the new process.",es:"El equipo pas\u00f3 la tarde delineando el nuevo proceso."}],tip:"'Map out' = crear un mapa detallado = planificar paso a paso. Implica sistematismo y visi\u00f3n clara.",extra:"'Roadmap' es el sustantivo relacionado en tecnolog\u00eda: 'a product roadmap' = un mapa de ruta del producto."},
+  {phrase:"count on",es:"contar con / depender de / confiar en",register:"neutro",context:"Se usa para expresar que alguien puede depender de otra persona o cosa. Muy frecuente en trabajo en equipo.",examples:[{en:"You can always <em>count on</em> her \u2014 she never misses a deadline.",es:"Siempre puedes contar con ella \u2014 nunca falla un plazo."},{en:"Can I <em>count on</em> your support during the board presentation?",es:"\u00bfPuedo contar con tu apoyo durante la presentaci\u00f3n del directorio?"},{en:"Don't <em>count on</em> the weather \u2014 have a backup plan.",es:"No cuentes con el clima \u2014 ten un plan alternativo."}],tip:"'Count on' = contar hacia adelante = confiar en que algo estar\u00e1 disponible. Sin\u00f3nimos: 'rely on', 'depend on'.",extra:"'I'm counting on you' es expresi\u00f3n de confianza pero tambi\u00e9n de presi\u00f3n. El tono determina cu\u00e1l de las dos es."},
+  {phrase:"push back",es:"resistir / rechazar / posponer",register:"neutro",context:"Se usa cuando alguien cuestiona, resiste o pide un cambio ante una decisi\u00f3n. Tambi\u00e9n significa posponer una fecha.",examples:[{en:"She <em>pushed back</em> on the timeline \u2014 she said two weeks wasn't enough.",es:"Cuestion\u00f3 el cronograma \u2014 dijo que dos semanas no eran suficientes."},{en:"The launch date was <em>pushed back</em> to allow more testing time.",es:"La fecha de lanzamiento fue pospuesta para dar m\u00e1s tiempo a las pruebas."},{en:"Don't be afraid to <em>push back</em> if the brief doesn't make sense.",es:"No tengas miedo de cuestionar si el brief no tiene sentido."}],tip:"'Push back' = empujar hacia atr\u00e1s = resistir o retrasar. Muy usado en negociaciones y gesti\u00f3n de proyectos.",extra:"'Pushback' (sustantivo) = resistencia a una idea. 'We got a lot of pushback on that proposal.' Muy com\u00fan en reuniones ejecutivas."},
+  {phrase:"own up",es:"admitir / reconocer un error",register:"informal",context:"Se usa cuando alguien confiesa abiertamente que cometi\u00f3 un error. Implica honestidad y valent\u00eda.",examples:[{en:"Someone broke the printer \u2014 whoever it was, please <em>own up</em>.",es:"Alguien rompi\u00f3 la impresora \u2014 quien haya sido, por favor que lo admita."},{en:"He finally <em>owned up</em> to making the wrong call on the investment.",es:"Finalmente admiti\u00f3 haber tomado la decisi\u00f3n incorrecta en la inversi\u00f3n."},{en:"It's better to <em>own up</em> early than to wait until things get worse.",es:"Es mejor admitirlo pronto que esperar a que las cosas empeoren."}],tip:"'Own up' = apropiarse de algo = asumir la propiedad de un error. M\u00e1s informal que 'admit' o 'confess'.",extra:"La cultura anglosajona valora mucho el 'owning your mistakes' como se\u00f1al de madurez profesional."},
+  {phrase:"bounce back",es:"recuperarse / rebotar / resurgir",register:"neutro",context:"Se usa para describir la recuperaci\u00f3n despu\u00e9s de un fracaso o per\u00edodo dif\u00edcil. Transmite resiliencia.",examples:[{en:"The market <em>bounced back</em> quickly after the initial shock.",es:"El mercado se recuper\u00f3 r\u00e1pidamente despu\u00e9s del shock inicial."},{en:"She <em>bounced back</em> from the rejection and launched her own startup.",es:"Se recuper\u00f3 del rechazo y lanz\u00f3 su propia startup."},{en:"It takes resilience to <em>bounce back</em> from a failed product launch.",es:"Se necesita resiliencia para recuperarse de un lanzamiento de producto fallido."}],tip:"'Bounce back' = rebotar como una pelota = volver al nivel anterior despu\u00e9s de caer.",extra:"'Bounce-back rate' = tasa de rebote (email marketing). En psicolog\u00eda: capacidad de resiliencia."},
+  {phrase:"zero in on",es:"centrarse en / enfocarse / identificar con precisi\u00f3n",register:"neutro",context:"Se usa cuando alguien dirige toda su atenci\u00f3n hacia un objetivo espec\u00edfico. Met\u00e1fora de apuntar con precisi\u00f3n.",examples:[{en:"The team <em>zeroed in on</em> the root cause of the bug in less than an hour.",es:"El equipo identific\u00f3 la causa ra\u00edz del bug en menos de una hora."},{en:"Let's <em>zero in on</em> the three markets with the highest growth potential.",es:"Enfoqu\u00e9monos en los tres mercados con mayor potencial de crecimiento."},{en:"She quickly <em>zeroed in on</em> the key issue during the audit.",es:"R\u00e1pidamente identific\u00f3 el problema clave durante la auditor\u00eda."}],tip:"'Zero in on' = apuntar al cero = enfocar con m\u00e1xima precisi\u00f3n en un objetivo.",extra:"Originado en terminolog\u00eda militar. Hoy es com\u00fan en negocios e investigaci\u00f3n para indicar foco extremo."},
+  {phrase:"kick off",es:"lanzar / iniciar / comenzar",register:"neutro",context:"Se usa para marcar el inicio de un proyecto, evento o reuni\u00f3n. M\u00e1s energ\u00e9tico que simplemente 'start'.",examples:[{en:"We're planning to <em>kick off</em> the new campaign on the first of the month.",es:"Planeamos lanzar la nueva campa\u00f1a el primero de mes."},{en:"The annual conference <em>kicks off</em> tomorrow at 9 AM.",es:"La conferencia anual comienza ma\u00f1ana a las 9 AM."},{en:"Let's <em>kick off</em> with a quick round of introductions.",es:"Comencemos con una ronda r\u00e1pida de presentaciones."}],tip:"'Kick off' = dar el puntapi\u00e9 inicial (del f\u00fatbol). Sustantivo: 'kickoff meeting' = reuni\u00f3n de inicio de proyecto.",extra:"'Kickoff meeting' o 'kick-off call' son t\u00e9rminos est\u00e1ndar en gesti\u00f3n de proyectos para la reuni\u00f3n inaugural."},
+  {phrase:"roll out",es:"lanzar / implementar / desplegar gradualmente",register:"neutro",context:"Se usa para describir el lanzamiento o implementaci\u00f3n gradual y planificada de un producto, sistema o pol\u00edtica.",examples:[{en:"We're planning to <em>roll out</em> the new feature to all users by Q3.",es:"Planeamos implementar la nueva funci\u00f3n para todos los usuarios en el tercer trimestre."},{en:"The vaccination campaign was <em>rolled out</em> across the country in phases.",es:"La campa\u00f1a de vacunaci\u00f3n fue implementada en todo el pa\u00eds por fases."},{en:"How long will it take to <em>roll out</em> the updated privacy policy?",es:"\u00bfCu\u00e1nto tiempo llevar\u00e1 implementar la pol\u00edtica de privacidad actualizada?"}],tip:"'Roll out' = desplegar como un rollo = implementar de forma progresiva y organizada.",extra:"'Rollout' (sustantivo) = implementaci\u00f3n o lanzamiento gradual. 'A phased rollout' = implementaci\u00f3n por fases."},
+  {phrase:"ramp up",es:"aumentar / intensificar / escalar progresivamente",register:"neutro",context:"Se usa para describir un aumento gradual pero deliberado en velocidad, producci\u00f3n, esfuerzo o escala.",examples:[{en:"We need to <em>ramp up</em> production to meet the holiday season demand.",es:"Necesitamos aumentar la producci\u00f3n para satisfacer la demanda de la temporada navide\u00f1a."},{en:"The team <em>ramped up</em> their efforts in the final two weeks before launch.",es:"El equipo intensific\u00f3 sus esfuerzos en las \u00faltimas dos semanas antes del lanzamiento."},{en:"Marketing spend will <em>ramp up</em> significantly in Q4.",es:"El gasto en marketing aumentar\u00e1 significativamente en el cuarto trimestre."}],tip:"'Ramp up' = subir por una rampa = aumentar de forma gradual y sostenida. Lo opuesto: 'ramp down'.",extra:"'Ramp-up period' = per\u00edodo de adaptaci\u00f3n e incremento inicial. Muy usado en onboarding de empleados."},
+  {phrase:"sign off on",es:"aprobar / dar el visto bueno a",register:"formal",context:"Se usa cuando alguien da aprobaci\u00f3n formal a un documento, decisi\u00f3n o proyecto. Muy com\u00fan en procesos de revisi\u00f3n corporativos.",examples:[{en:"The CEO needs to <em>sign off on</em> any expenditure over $10,000.",es:"El CEO necesita aprobar cualquier gasto superior a $10,000."},{en:"Has the legal team <em>signed off on</em> the new contract template?",es:"\u00bfEl equipo legal ha dado el visto bueno a la nueva plantilla de contrato?"},{en:"I'm waiting for the client to <em>sign off on</em> the final design.",es:"Estoy esperando que el cliente apruebe el dise\u00f1o final."}],tip:"'Sign off on' = firmar para cerrar = dar aprobaci\u00f3n formal. Implica responsabilidad expl\u00edcita.",extra:"'Sign off' solo (sin 'on') = terminar una comunicaci\u00f3n: 'I'll sign off here' al final de un correo. Dos usos distintos."},
+  {phrase:"weigh up",es:"sopesar / evaluar / comparar opciones",register:"neutro",context:"Se usa cuando alguien eval\u00faa cuidadosamente los pros y contras antes de tomar una decisi\u00f3n.",examples:[{en:"I'm <em>weighing up</em> whether to accept the job offer or stay.",es:"Estoy sopesando si aceptar la oferta de trabajo o quedarme."},{en:"The committee spent a week <em>weighing up</em> all the proposals.",es:"El comit\u00e9 pas\u00f3 una semana evaluando todas las propuestas."},{en:"Before committing, we need to <em>weigh up</em> the risks carefully.",es:"Antes de comprometernos, necesitamos sopesar los riesgos con cuidado."}],tip:"'Weigh up' = poner en la balanza = comparar el peso de distintas opciones.",extra:"En ingl\u00e9s americano se dice simplemente 'weigh' (sin 'up'). En ingl\u00e9s brit\u00e1nico, 'weigh up' es m\u00e1s natural."},
+  {phrase:"bring in",es:"incorporar / contratar / generar ingresos",register:"neutro",context:"Tres usos: (1) contratar a alguien externo, (2) generar ingresos, (3) incorporar una nueva pr\u00e1ctica.",examples:[{en:"We're going to <em>bring in</em> an external consultant to review the process.",es:"Vamos a incorporar a un consultor externo para revisar el proceso."},{en:"The new product line is already <em>bringing in</em> significant revenue.",es:"La nueva l\u00ednea de productos ya est\u00e1 generando ingresos significativos."},{en:"They <em>brought in</em> agile methodology to improve delivery speed.",es:"Incorporaron la metodolog\u00eda \u00e1gil para mejorar la velocidad de entrega."}],tip:"'Bring in' = traer hacia adentro = incorporar desde afuera.",extra:"'Bring in a new perspective' = aportar una perspectiva nueva. Muy usado en innovaci\u00f3n y gesti\u00f3n del cambio."},
+  {phrase:"hand over",es:"entregar / ceder / traspasar",register:"neutro",context:"Se usa cuando algo (control, responsabilidad, objeto) se transfiere formalmente de una persona a otra.",examples:[{en:"She <em>handed over</em> all her accounts to her successor before leaving.",es:"Le entreg\u00f3 todas sus cuentas a su sucesor antes de irse."},{en:"Please <em>hand over</em> your badge and access card when you exit.",es:"Por favor entrega tu credencial y tarjeta de acceso al salir."},{en:"The outgoing president <em>handed over</em> power in a formal ceremony.",es:"El presidente saliente cedi\u00f3 el poder en una ceremonia formal."}],tip:"'Hand over' = poner en la mano de otro = transferir responsabilidad o control. M\u00e1s formal que simplemente 'give'.",extra:"'Handover' (sustantivo) = traspaso formal. 'A smooth handover' = una transici\u00f3n sin problemas."},
+  {phrase:"flesh out",es:"desarrollar / ampliar / darle cuerpo a una idea",register:"neutro",context:"Se usa cuando una idea b\u00e1sica se desarrolla con m\u00e1s detalles. Implica pasar de lo superficial a lo completo.",examples:[{en:"The proposal looks promising \u2014 let's <em>flesh it out</em> before the meeting.",es:"La propuesta parece prometedora \u2014 desarroll\u00e9mosla antes de la reuni\u00f3n."},{en:"Could you <em>flesh out</em> your initial concept with some concrete examples?",es:"\u00bfPodr\u00edas ampliar tu concepto inicial con algunos ejemplos concretos?"},{en:"We have the structure \u2014 now we need to <em>flesh out</em> each section.",es:"Tenemos la estructura \u2014 ahora necesitamos darle cuerpo a cada secci\u00f3n."}],tip:"'Flesh out' = poner carne al esqueleto = a\u00f1adir sustancia y detalle a algo b\u00e1sico.",extra:"Se usa en fases de desarrollo de proyectos y dise\u00f1o de productos. 'This needs more fleshing out' = esto necesita m\u00e1s desarrollo."},
+  {phrase:"back down",es:"echarse atr\u00e1s / ceder / retractarse",register:"neutro",context:"Se usa cuando alguien cede en una posici\u00f3n que manten\u00eda, ante presi\u00f3n o evidencia contraria.",examples:[{en:"He refused to <em>back down</em> \u2014 he was convinced he was right.",es:"Se neg\u00f3 a echarse atr\u00e1s \u2014 estaba convencido de que ten\u00eda raz\u00f3n."},{en:"She <em>backed down</em> from her initial demand after seeing the data.",es:"Cedi\u00f3 en su demanda inicial despu\u00e9s de ver los datos."},{en:"The company <em>backed down</em> from the controversial pricing decision.",es:"La empresa se retract\u00f3 de la controvertida decisi\u00f3n de precios."}],tip:"'Back down' = retroceder desde una posici\u00f3n = ceder. Lo opuesto: 'stand firm' o 'hold your ground'.",extra:"Diferente de 'back off' (alejarse) y 'back out' (retirarse de un acuerdo). 'Back down' es sobre cambiar de posici\u00f3n en una disputa."},
+  {phrase:"hammer out",es:"acordar tras negociaci\u00f3n / resolver a fuerza de trabajo",register:"neutro",context:"Se usa cuando un acuerdo o soluci\u00f3n se logra despu\u00e9s de mucha negociaci\u00f3n. Implica proceso duro pero exitoso.",examples:[{en:"The two teams finally <em>hammered out</em> an agreement after six hours.",es:"Los dos equipos finalmente llegaron a un acuerdo despu\u00e9s de seis horas."},{en:"We need to <em>hammer out</em> the contract details before Monday.",es:"Necesitamos resolver los detalles del contrato antes del lunes."},{en:"The policy was <em>hammered out</em> through months of consultation.",es:"La pol\u00edtica fue acordada a trav\u00e9s de meses de consulta."}],tip:"'Hammer out' = golpear hasta dar forma = lograr algo a trav\u00e9s de esfuerzo y negociaci\u00f3n persistente.",extra:"La met\u00e1fora es del trabajo del herrero. Implica que el proceso fue dif\u00edcil pero el resultado es s\u00f3lido."},
+  {phrase:"stem from",es:"provenir de / originarse en / tener su ra\u00edz en",register:"formal",context:"Se usa para indicar el origen o causa de algo. Muy com\u00fan en an\u00e1lisis de problemas y documentos formales.",examples:[{en:"The communication issues <em>stem from</em> unclear role definitions.",es:"Los problemas de comunicaci\u00f3n provienen de definiciones de roles poco claras."},{en:"Her confidence <em>stems from</em> years of preparation and hard work.",es:"Su confianza proviene de a\u00f1os de preparaci\u00f3n y trabajo duro."},{en:"Many startup failures <em>stem from</em> a lack of product-market fit.",es:"Muchos fracasos de startups se originan en la falta de product-market fit."}],tip:"'Stem from' = crecer desde el tronco = tener su origen en algo. M\u00e1s formal y elegante que 'come from'.",extra:"Muy usado en an\u00e1lisis de causa ra\u00edz: 'The problem stems from...' es una apertura formal y directa para diagn\u00f3sticos."},
+  {phrase:"shed light on",es:"arrojar luz sobre / esclarecer / aclarar",register:"formal",context:"Se usa cuando algo ayuda a entender mejor una situaci\u00f3n confusa. Muy frecuente en investigaci\u00f3n y an\u00e1lisis.",examples:[{en:"This report <em>sheds light on</em> the factors driving customer churn.",es:"Este informe arroja luz sobre los factores que impulsan la p\u00e9rdida de clientes."},{en:"The interviews <em>shed light on</em> why employees were leaving.",es:"Las entrevistas aclararon por qu\u00e9 los empleados se iban."},{en:"Could you <em>shed some light on</em> your decision-making process?",es:"\u00bfPodr\u00edas arrojar algo de luz sobre tu proceso de toma de decisiones?"}],tip:"'Shed light on' = tirar luz sobre = iluminar lo que estaba oscuro. Sujeto t\u00edpico: estudios, datos, entrevistas.",extra:"Sin\u00f3nimos formales: 'illuminate', 'clarify', 'elucidate'. Muy visual y usado en presentaciones ejecutivas."},
+  {phrase:"touch base",es:"ponerse en contacto / hacer un chequeo r\u00e1pido",register:"neutro",context:"Se usa para indicar un contacto breve para actualizar o verificar el estado de algo. Muy com\u00fan en ingl\u00e9s corporativo americano.",examples:[{en:"Let's <em>touch base</em> on Friday to see where we are with the proposal.",es:"Pong\u00e1monos en contacto el viernes para ver c\u00f3mo vamos con la propuesta."},{en:"I just wanted to <em>touch base</em> before the client presentation.",es:"Solo quer\u00eda hacer un chequeo r\u00e1pido antes de la presentaci\u00f3n al cliente."},{en:"She <em>touches base</em> with her team every Monday morning.",es:"Ella hace un chequeo con su equipo cada lunes por la ma\u00f1ana."}],tip:"'Touch base' = tocar la base (del b\u00e9isbol) = hacer un contacto r\u00e1pido para confirmar que todo est\u00e1 bien.",extra:"Puede sonar clich\u00e9 en algunos contextos. Sin\u00f3nimos m\u00e1s frescos: 'check in', 'sync up', 'catch up'."},
+  {phrase:"take stock of",es:"hacer un balance de / evaluar la situaci\u00f3n",register:"formal",context:"Se usa cuando alguien se detiene a reflexionar y evaluar su situaci\u00f3n actual antes de decidir el pr\u00f3ximo paso.",examples:[{en:"At the end of the year, it's good to <em>take stock of</em> what you've achieved.",es:"Al final del a\u00f1o, es bueno hacer un balance de lo que has logrado."},{en:"We need to <em>take stock of</em> our resources before committing to this project.",es:"Necesitamos evaluar nuestros recursos antes de comprometernos con este proyecto."},{en:"She <em>took stock of</em> her career and realized she wanted a change.",es:"Hizo un balance de su carrera y se dio cuenta de que quer\u00eda un cambio."}],tip:"'Take stock' = hacer inventario = contar lo que tienes antes de decidir.",extra:"Del mundo comercial: los comerciantes tomaban stock peri\u00f3dicamente. Hoy es met\u00e1fora para reflexi\u00f3n estrat\u00e9gica."},
+  {phrase:"gear up",es:"prepararse / equiparse / alistarse",register:"neutro",context:"Se usa cuando alguien o una organizaci\u00f3n se prepara activamente para un evento, lanzamiento o desaf\u00edo pr\u00f3ximo.",examples:[{en:"The team is <em>gearing up</em> for the biggest product launch of the year.",es:"El equipo se est\u00e1 preparando para el lanzamiento de producto m\u00e1s importante del a\u00f1o."},{en:"We need to <em>gear up</em> our customer support before the campaign goes live.",es:"Necesitamos reforzar nuestro soporte al cliente antes de que la campa\u00f1a salga al aire."},{en:"She's been <em>gearing up</em> for this presentation for three weeks.",es:"Lleva tres semanas prepar\u00e1ndose para esta presentaci\u00f3n."}],tip:"'Gear up' = poner el engranaje en marcha = preparar toda la maquinaria para lo que viene.",extra:"'Gear up for' siempre implica preparaci\u00f3n activa y anticipatoria. M\u00e1s energ\u00e9tico que simplemente 'prepare for'."},
+  {phrase:"pave the way for",es:"allanar el camino para / preparar el terreno",register:"formal",context:"Se usa cuando algo crea las condiciones necesarias para que ocurra algo m\u00e1s en el futuro.",examples:[{en:"This pilot program will <em>pave the way for</em> a nationwide rollout.",es:"Este programa piloto allanar\u00e1 el camino para una implementaci\u00f3n nacional."},{en:"Her research <em>paved the way for</em> the development of the new vaccine.",es:"Su investigaci\u00f3n prepar\u00f3 el terreno para el desarrollo de la nueva vacuna."},{en:"The agreement <em>paves the way for</em> closer economic cooperation.",es:"El acuerdo abre el camino para una cooperaci\u00f3n econ\u00f3mica m\u00e1s estrecha."}],tip:"'Pave the way' = pavimentar el camino = hacer que el tr\u00e1nsito futuro sea m\u00e1s f\u00e1cil.",extra:"Muy com\u00fan en discursos, informes y titulares. Sujeto t\u00edpico: acuerdos, estudios, legislaci\u00f3n, eventos hist\u00f3ricos."},
+  {phrase:"factor in",es:"tener en cuenta / incluir en el c\u00e1lculo",register:"neutro",context:"Se usa cuando se incluye un elemento adicional en un an\u00e1lisis, plan o c\u00e1lculo. Muy com\u00fan en planificaci\u00f3n y toma de decisiones.",examples:[{en:"Did you <em>factor in</em> the shipping costs when calculating the budget?",es:"\u00bfTuviste en cuenta los costos de env\u00edo al calcular el presupuesto?"},{en:"We need to <em>factor in</em> the time difference when scheduling the call.",es:"Necesitamos tener en cuenta la diferencia horaria al programar la llamada."},{en:"Please <em>factor in</em> potential delays when setting the timeline.",es:"Por favor incluye posibles retrasos al fijar el cronograma."}],tip:"'Factor in' = incluir como factor = agregar una variable al c\u00e1lculo o plan.",extra:"'Factor out' = lo opuesto: excluir algo del c\u00e1lculo. 'Factor in the risk' = considerar el riesgo."},
+  {phrase:"phase out",es:"eliminar gradualmente / descontinuar",register:"formal",context:"Se usa cuando algo se elimina de forma progresiva y planificada, no de golpe. Muy com\u00fan en pol\u00edtica empresarial y tecnolog\u00eda.",examples:[{en:"The company plans to <em>phase out</em> plastic packaging by 2026.",es:"La empresa planea eliminar gradualmente el embalaje pl\u00e1stico para 2026."},{en:"That software is being <em>phased out</em> \u2014 migrate before December.",es:"Ese software est\u00e1 siendo descontinuado \u2014 migra antes de diciembre."},{en:"The government is <em>phasing out</em> fossil fuel subsidies over five years.",es:"El gobierno est\u00e1 eliminando gradualmente los subsidios a los combustibles f\u00f3siles en cinco a\u00f1os."}],tip:"'Phase out' = eliminar por fases. Lo opuesto: 'phase in' = introducir progresivamente.",extra:"'Phase-out plan' = plan de descontinuaci\u00f3n. Muy com\u00fan en documentos de sostenibilidad y tecnolog\u00eda."},
+  {phrase:"liaise with",es:"coordinarse con / enlazarse con",register:"formal",context:"Se usa en contextos profesionales para indicar coordinaci\u00f3n estrecha con otro departamento, equipo o persona.",examples:[{en:"You'll need to <em>liaise with</em> the legal team before sending that email.",es:"Necesitar\u00e1s coordinarte con el equipo legal antes de enviar ese correo."},{en:"She <em>liaises with</em> clients on a daily basis as part of her role.",es:"Ella se coordina con los clientes a diario como parte de su rol."},{en:"Our team <em>liaises closely with</em> the regional offices to align strategy.",es:"Nuestro equipo se coordina estrechamente con las oficinas regionales para alinear la estrategia."}],tip:"'Liaise' (del franc\u00e9s) = actuar como enlace. 'Liaise with' = coordinarse con. M\u00e1s formal que 'work with'.",extra:"Muy usado en Reino Unido y contextos corporativos internacionales. En ingl\u00e9s americano, 'coordinate with' es m\u00e1s natural."},
+  {phrase:"head up",es:"liderar / estar al frente de",register:"neutro",context:"Se usa para indicar que alguien est\u00e1 a cargo o dirige un equipo o proyecto. M\u00e1s din\u00e1mico que 'lead' o 'manage'.",examples:[{en:"She was asked to <em>head up</em> the new digital transformation initiative.",es:"Le pidieron que liderara la nueva iniciativa de transformaci\u00f3n digital."},{en:"Who's going to <em>head up</em> the team while the director is away?",es:"\u00bfQui\u00e9n va a estar al frente del equipo mientras el director est\u00e1 fuera?"},{en:"He's been <em>heading up</em> the research division for three years.",es:"Ha estado liderando la divisi\u00f3n de investigaci\u00f3n durante tres a\u00f1os."}],tip:"'Head up' = estar en la cabeza de = liderar desde el frente. M\u00e1s din\u00e1mico que 'manage' o 'run'.",extra:"'Head up' implica un rol activo de liderazgo, no solo un t\u00edtulo."},
+  {phrase:"go back on",es:"incumplir / retractarse de una promesa",register:"neutro",context:"Se usa cuando alguien no cumple con lo que prometi\u00f3 o acord\u00f3. Tiene connotaci\u00f3n negativa de falta de integridad.",examples:[{en:"He <em>went back on</em> his word \u2014 he promised a raise and never delivered.",es:"Incumpli\u00f3 su palabra \u2014 prometi\u00f3 un aumento y nunca lo dio."},{en:"The company <em>went back on</em> the agreement they signed last year.",es:"La empresa incumpli\u00f3 el acuerdo que firmaron el a\u00f1o pasado."},{en:"Don't <em>go back on</em> your commitment \u2014 they're counting on you.",es:"No te retractes de tu compromiso \u2014 est\u00e1n contando contigo."}],tip:"'Go back on' = volver hacia atr\u00e1s sobre lo dicho = deshacer un compromiso. Siempre negativo.",extra:"'Go back on your word' = faltar a la palabra. En negocios es muy grave \u2014 implica p\u00e9rdida de confianza."},
+  {phrase:"live up to",es:"estar a la altura de / cumplir con expectativas",register:"neutro",context:"Se usa para evaluar si algo o alguien cumpli\u00f3 con las expectativas o est\u00e1ndares previos.",examples:[{en:"The product didn't quite <em>live up to</em> the hype \u2014 users were disappointed.",es:"El producto no estuvo del todo a la altura del hype \u2014 los usuarios quedaron decepcionados."},{en:"She really <em>lived up to</em> her reputation as a brilliant negotiator.",es:"Realmente estuvo a la altura de su reputaci\u00f3n como brillante negociadora."},{en:"It's hard to <em>live up to</em> your first successful product.",es:"Es dif\u00edcil estar a la altura de tu primer producto exitoso."}],tip:"'Live up to' = vivir a la altura de = alcanzar el nivel que se esperaba.",extra:"'Live up to your potential' = alcanzar tu potencial. Muy usado en evaluaciones de desempe\u00f1o y cr\u00edticas de productos."},
+  {phrase:"tap into",es:"aprovechar / acceder a / explotar un recurso",register:"neutro",context:"Se usa cuando alguien accede o aprovecha un recurso, talento o sentimiento que exist\u00eda pero no se estaba usando.",examples:[{en:"The campaign really <em>taps into</em> people's nostalgia for the 90s.",es:"La campa\u00f1a realmente aprovecha la nostalgia de la gente por los 90."},{en:"We need to <em>tap into</em> the youth market more effectively.",es:"Necesitamos acceder al mercado joven de forma m\u00e1s efectiva."},{en:"She has a unique ability to <em>tap into</em> her team's strengths.",es:"Ella tiene una habilidad \u00fanica para aprovechar las fortalezas de su equipo."}],tip:"'Tap into' = abrir el grifo hacia algo = acceder a un recurso latente o no explotado.",extra:"'Tap into emotions' = conectar con las emociones de alguien. Muy usado en marketing y liderazgo."},
+  {phrase:"cut corners",es:"atajar / hacer las cosas a medias",register:"informal",context:"Se usa cuando alguien omite pasos importantes para ahorrar tiempo o dinero, generalmente con consecuencias negativas.",examples:[{en:"We can't afford to <em>cut corners</em> on safety \u2014 it's non-negotiable.",es:"No podemos permitirnos saltarnos pasos en seguridad \u2014 no es negociable."},{en:"The contractor <em>cut corners</em> on the materials and now there are structural problems.",es:"El contratista us\u00f3 materiales de baja calidad y ahora hay problemas estructurales."},{en:"If you <em>cut corners</em> now, you'll pay for it later.",es:"Si haces las cosas a medias ahora, lo pagar\u00e1s despu\u00e9s."}],tip:"'Cut corners' = cortar las esquinas = tomar el camino m\u00e1s corto sacrificando calidad. Siempre negativo.",extra:"La met\u00e1fora viene de la carpinter\u00eda: cortar las esquinas del trabajo fino para terminarlo m\u00e1s r\u00e1pido."},
+  {phrase:"bear with",es:"tener paciencia / aguantar un momento",register:"formal",context:"Se usa para pedir paciencia a alguien mientras se resuelve algo. M\u00e1s formal y educado que 'hold on'.",examples:[{en:"<em>Bear with</em> me for just a moment \u2014 I'm pulling up the file.",es:"Ten paciencia un momento \u2014 estoy abriendo el archivo."},{en:"<em>Bear with</em> us while we resolve this technical issue.",es:"Tengan paciencia con nosotros mientras resolvemos este problema t\u00e9cnico."},{en:"I know this section is complex \u2014 please <em>bear with</em> me.",es:"S\u00e9 que esta secci\u00f3n es compleja \u2014 por favor tengan paciencia conmigo."}],tip:"'Bear with' = cargar con (la espera) = aguantar pacientemente. M\u00e1s formal que 'hold on'.",extra:"'Bear with me' es la forma m\u00e1s educada de pedir paciencia en ingl\u00e9s profesional. Evita el m\u00e1s brusco 'wait'."},
+  {phrase:"ride out",es:"aguantar / superar / sobrevivir una crisis",register:"neutro",context:"Se usa para describir c\u00f3mo alguien o algo sobrevive o atraviesa un per\u00edodo dif\u00edcil sin sucumbir.",examples:[{en:"The company managed to <em>ride out</em> the recession without layoffs.",es:"La empresa logr\u00f3 superar la recesi\u00f3n sin despidos."},{en:"We just need to <em>ride out</em> this slow period \u2014 it won't last forever.",es:"Solo necesitamos aguantar este per\u00edodo lento \u2014 no durar\u00e1 para siempre."},{en:"She's <em>ridden out</em> tougher storms than this in her career.",es:"Ella ha sobrevivido tormentas m\u00e1s dif\u00edciles que esta en su carrera."}],tip:"'Ride out' = montar la ola sin caer = aguantar hasta que pase la tormenta.",extra:"Met\u00e1fora marina: los barcos 'ride out' las tormentas anclados. En los negocios: resistir una crisis sin rendirse."},
+  {phrase:"hold off",es:"esperar / postergar / aguantar antes de actuar",register:"neutro",context:"Se usa cuando alguien decide no actuar todav\u00eda, esperando mejores condiciones o m\u00e1s informaci\u00f3n.",examples:[{en:"Let's <em>hold off</em> on signing until we get the legal team's review.",es:"Esperemos para firmar hasta que tengamos la revisi\u00f3n del equipo legal."},{en:"She <em>held off</em> on announcing the news until all the details were confirmed.",es:"Esper\u00f3 para anunciar la noticia hasta que todos los detalles fueron confirmados."},{en:"Can we <em>hold off</em> on this decision until next week?",es:"\u00bfPodemos postergar esta decisi\u00f3n hasta la pr\u00f3xima semana?"}],tip:"'Hold off' = aguantar = retrasar la acci\u00f3n deliberadamente hasta tener las condiciones correctas.",extra:"Diferente de 'put off' (posponer sin fecha clara). 'Hold off' implica una espera activa con intenci\u00f3n de actuar pronto."},
+  {phrase:"move on",es:"seguir adelante / pasar al siguiente punto / superar",register:"neutro",context:"Para indicar que es momento de avanzar, ya sea en una conversaci\u00f3n o emocionalmente (superar algo dif\u00edcil).",examples:[{en:"Let's <em>move on</em> to the next item on the agenda.",es:"Pasemos al siguiente punto de la agenda."},{en:"It's been six months \u2014 it's time to <em>move on</em> and not dwell on the failure.",es:"Han sido seis meses \u2014 es tiempo de seguir adelante y no quedarse en el fracaso."},{en:"The company has <em>moved on</em> from that strategy and is focusing on digital.",es:"La empresa ha dejado atr\u00e1s esa estrategia y se est\u00e1 enfocando en lo digital."}],tip:"'Move on' = moverse hacia adelante = no quedarse estancado. Para reuniones y para la vida.",extra:"'Time to move on' es muy usada en liderazgo para indicar cierre de un tema sin m\u00e1s debate."},
+  {phrase:"press ahead",es:"seguir adelante / avanzar con determinaci\u00f3n",register:"formal",context:"Se usa cuando alguien decide continuar con un plan a pesar de obst\u00e1culos, dudas o resistencia.",examples:[{en:"Despite the budget cuts, the team decided to <em>press ahead</em> with the project.",es:"A pesar de los recortes presupuestarios, el equipo decidi\u00f3 seguir adelante con el proyecto."},{en:"The government plans to <em>press ahead</em> with the infrastructure reforms.",es:"El gobierno planea avanzar con las reformas de infraestructura."},{en:"We've come too far to stop now \u2014 let's <em>press ahead</em>.",es:"Hemos llegado demasiado lejos para detenernos ahora \u2014 sigamos adelante."}],tip:"'Press ahead' = presionar hacia adelante = avanzar con fuerza a pesar de la resistencia.",extra:"M\u00e1s com\u00fan en ingl\u00e9s brit\u00e1nico y contextos pol\u00edticos. En ingl\u00e9s americano, 'push forward' o 'move ahead' son m\u00e1s naturales."},
+  {phrase:"zoom in on",es:"ampliar / enfocarse en detalle",register:"neutro",context:"Met\u00e1fora fotogr\u00e1fica: acercar la lente para ver algo con m\u00e1s detalle. Muy usado en an\u00e1lisis y presentaciones.",examples:[{en:"Let's <em>zoom in on</em> the Q3 numbers \u2014 there's something interesting there.",es:"Acerquemos el zoom a los n\u00fameros del tercer trimestre \u2014 hay algo interesante ah\u00ed."},{en:"The report <em>zooms in on</em> three specific markets.",es:"El informe se enfoca en detalle en tres mercados espec\u00edficos."},{en:"I'd like to <em>zoom in on</em> one particular aspect of your proposal.",es:"Me gustar\u00eda enfocarme en detalle en un aspecto particular de tu propuesta."}],tip:"'Zoom in on' = acercar la c\u00e1mara = examinar algo con mayor nivel de detalle.",extra:"Par complementario: 'zoom out' = alejarse para ver el panorama general. 'Let's zoom out and look at the big picture.'"},
+  {phrase:"single out",es:"destacar / seleccionar / se\u00f1alar a alguien espec\u00edficamente",register:"neutro",context:"Se usa cuando se elige o se\u00f1ala a una persona de entre un grupo, ya sea para elogiarla o criticarla.",examples:[{en:"The manager <em>singled out</em> her work as the best of the quarter.",es:"La gerente destac\u00f3 su trabajo como el mejor del trimestre."},{en:"I don't want to <em>single anyone out</em> \u2014 this is a team issue.",es:"No quiero se\u00f1alar a nadie en particular \u2014 este es un problema de equipo."},{en:"Which candidate would you <em>single out</em> as the top choice?",es:"\u00bfA qu\u00e9 candidato destacar\u00edas como la primera opci\u00f3n?"}],tip:"'Single out' = sacar a uno del grupo = identificar y separar a alguien del resto.",extra:"Puede ser positivo (reconocer) o negativo (se\u00f1alar injustamente). El contexto y el tono lo determinan."},
+  {phrase:"get bogged down",es:"atascarse / quedarse empantanado en los detalles",register:"neutro",context:"Se usa cuando alguien pierde velocidad por exceso de detalles, burocracia o problemas menores.",examples:[{en:"Don't <em>get bogged down</em> in the details \u2014 focus on the big picture.",es:"No te quedes empantanado en los detalles \u2014 enf\u00f3cate en el panorama general."},{en:"The project <em>got bogged down</em> in approval processes and missed the deadline.",es:"El proyecto se atasc\u00f3 en procesos de aprobaci\u00f3n y perdi\u00f3 el plazo."},{en:"We <em>got bogged down</em> in a long debate about the color scheme.",es:"Nos quedamos atascados en un largo debate sobre la paleta de colores."}],tip:"'Get bogged down' = hundirse en el barro = perder velocidad por exceso de obst\u00e1culos menores.",extra:"Met\u00e1fora del terreno pantanoso. En proyectos y reuniones: se\u00f1al de que hay que cambiar el enfoque."},
+  {phrase:"stand by",es:"estar listo / apoyar / mantenerse en espera",register:"neutro",context:"Tres usos: (1) estar preparado para actuar, (2) apoyar a alguien en un momento dif\u00edcil, (3) esperar en comunicaciones.",examples:[{en:"Please <em>stand by</em> \u2014 we're about to begin the broadcast.",es:"Por favor esperen \u2014 estamos a punto de comenzar la transmisi\u00f3n."},{en:"She <em>stood by</em> her colleague when everyone else turned against him.",es:"Ella apoy\u00f3 a su colega cuando todos los dem\u00e1s se volvieron en su contra."},{en:"The technical team is <em>standing by</em> in case there are issues during the launch.",es:"El equipo t\u00e9cnico est\u00e1 en espera por si hay problemas durante el lanzamiento."}],tip:"'Stand by' = permanecer de pie al lado = estar disponible y listo. Implica preparaci\u00f3n y lealtad.",extra:"'Standby' como sustantivo: 'a standby generator' = generador de emergencia. 'On standby' = en modo de espera."},
+  {phrase:"clear up",es:"aclarar / resolver / despejarse",register:"neutro",context:"Tres usos: (1) aclarar un malentendido, (2) resolver un problema, (3) el clima despeja.",examples:[{en:"Let me <em>clear up</em> any confusion about the new policy.",es:"D\u00e9jame aclarar cualquier confusi\u00f3n sobre la nueva pol\u00edtica."},{en:"Has the situation <em>cleared up</em> since the last update?",es:"\u00bfLa situaci\u00f3n se ha resuelto desde la \u00faltima actualizaci\u00f3n?"},{en:"The weather should <em>clear up</em> by afternoon \u2014 the forecast looks better.",es:"El clima deber\u00eda despejarse para la tarde \u2014 el pron\u00f3stico se ve mejor."}],tip:"'Clear up' = despejar hacia arriba = eliminar la confusi\u00f3n, los problemas o las nubes.",extra:"'Clear something up' = aclarar algo espec\u00edfico: 'I need to clear something up \u2014 there's been a misunderstanding.'"},
+  {phrase:"give way to",es:"ceder el paso a / dar paso a / ser reemplazado por",register:"formal",context:"Se usa cuando algo cede ante otra cosa o es reemplazado por algo nuevo.",examples:[{en:"Traditional retail is <em>giving way to</em> e-commerce across all categories.",es:"El retail tradicional est\u00e1 dando paso al e-commerce en todas las categor\u00edas."},{en:"Her initial resistance <em>gave way to</em> genuine enthusiasm for the project.",es:"Su resistencia inicial cedi\u00f3 ante un entusiasmo genuino por el proyecto."},{en:"Please <em>give way</em> to pedestrians at the crossing.",es:"Por favor cede el paso a los peatones en el cruce."}],tip:"'Give way to' = abrir el camino para otro = ser reemplazado o ceder ante algo m\u00e1s fuerte.",extra:"Muy usado en an\u00e1lisis de tendencias: 'X is giving way to Y' = X est\u00e1 siendo sustituido por Y."},
+  {phrase:"come into play",es:"entrar en juego / comenzar a tener relevancia",register:"formal",context:"Se usa cuando un factor, regla o elemento empieza a ser relevante o a influir en una situaci\u00f3n.",examples:[{en:"Several factors <em>came into play</em> during the acquisition process.",es:"Varios factores entraron en juego durante el proceso de adquisici\u00f3n."},{en:"This is where your negotiation skills really <em>come into play</em>.",es:"Aqu\u00ed es donde tus habilidades de negociaci\u00f3n realmente entran en juego."},{en:"Tax regulations <em>come into play</em> when you cross that revenue threshold.",es:"Las regulaciones fiscales entran en juego cuando superas ese umbral de ingresos."}],tip:"'Come into play' = entrar al campo de juego = volverse relevante o activo.",extra:"Sin\u00f3nimos: 'come into effect', 'become relevant', 'kick in'. 'Come into play' tiene el matiz de que algo que estaba esperando ahora es relevante."},
+  {phrase:"pin down",es:"concretar / precisar / identificar con exactitud",register:"neutro",context:"Se usa cuando alguien trata de fijar algo que es vago: una fecha, una idea, una causa o una persona dif\u00edcil de comprometer.",examples:[{en:"We've been trying to <em>pin down</em> the exact launch date for weeks.",es:"Llevamos semanas intentando concretar la fecha exacta de lanzamiento."},{en:"It's hard to <em>pin down</em> what's causing the drop in engagement.",es:"Es dif\u00edcil identificar exactamente qu\u00e9 est\u00e1 causando la ca\u00edda en el engagement."},{en:"The client is impossible to <em>pin down</em> \u2014 she cancels every call.",es:"La cliente es imposible de comprometer \u2014 cancela cada llamada."}],tip:"'Pin down' = clavar en un punto fijo = precisar algo que se mueve o es vago.",extra:"'Pin someone down' = lograr que alguien se comprometa con una respuesta o fecha concreta."},
+  {phrase:"flag up",es:"se\u00f1alar / advertir / llamar la atenci\u00f3n sobre",register:"formal",context:"Se usa para indicar que algo requiere atenci\u00f3n especial o es un riesgo. Muy com\u00fan en auditor\u00edas y evaluaciones de riesgo.",examples:[{en:"The auditor <em>flagged up</em> several discrepancies in the accounts.",es:"El auditor se\u00f1al\u00f3 varias discrepancias en las cuentas."},{en:"I wanted to <em>flag up</em> a potential issue before it becomes a problem.",es:"Quer\u00eda advertir sobre un problema potencial antes de que se convierta en uno."},{en:"These concerns were <em>flagged up</em> in the risk assessment report.",es:"Estas preocupaciones fueron se\u00f1aladas en el informe de evaluaci\u00f3n de riesgos."}],tip:"'Flag up' = levantar una bandera = marcar algo para que sea visible. M\u00e1s urgente que 'mention'.",extra:"En ingl\u00e9s americano se dice simplemente 'flag' (sin 'up'): 'I wanted to flag this for your attention.' Ambas versiones son v\u00e1lidas."},
+  {phrase:"ease into",es:"entrar gradualmente / adaptarse poco a poco",register:"neutro",context:"Se usa para describir una transici\u00f3n suave y progresiva hacia algo nuevo. Implica no forzar el cambio.",examples:[{en:"Let's <em>ease into</em> the new workflow \u2014 no need to change everything at once.",es:"Entremos gradualmente al nuevo flujo de trabajo \u2014 no hay necesidad de cambiar todo a la vez."},{en:"She <em>eased into</em> the leadership role over her first three months.",es:"Se fue adaptando al rol de liderazgo durante sus primeros tres meses."},{en:"After surgery, he had to <em>ease into</em> exercise very slowly.",es:"Despu\u00e9s de la cirug\u00eda, tuvo que retomar el ejercicio muy gradualmente."}],tip:"'Ease into' = deslizarse suavemente hacia algo. Lo opuesto: 'jump into' (entrar de golpe).",extra:"'Ease someone into something' = ayudar a alguien a adaptarse gradualmente. Muy usado en onboarding y gesti\u00f3n del cambio."},
+  {phrase:"stand in for",es:"reemplazar temporalmente / cubrir a alguien",register:"neutro",context:"Se usa cuando alguien cubre temporalmente el rol de otra persona que no est\u00e1 disponible.",examples:[{en:"Can you <em>stand in for</em> me at the Monday meeting? I'll be traveling.",es:"\u00bfPuedes cubrirme en la reuni\u00f3n del lunes? Estar\u00e9 viajando."},{en:"She <em>stood in for</em> the CEO during his medical leave.",es:"Ella cubri\u00f3 al CEO durante su licencia m\u00e9dica."},{en:"He often <em>stands in for</em> the department head when she's unavailable.",es:"\u00c9l frecuentemente cubre a la jefa del departamento cuando no est\u00e1 disponible."}],tip:"'Stand in for' = ponerse en el lugar de = sustituir temporalmente. Diferente de 'take over' (m\u00e1s permanente).",extra:"'Stand-in' como sustantivo: un sustituto temporal. En cine, ocupa el lugar del actor durante el rodaje t\u00e9cnico."},
+  {phrase:"filter out",es:"filtrar / eliminar / descartar",register:"neutro",context:"Se usa cuando se eliminan elementos no deseados de un conjunto. Aplica para datos, candidatos o informaci\u00f3n irrelevante.",examples:[{en:"The algorithm <em>filters out</em> spam before it reaches your inbox.",es:"El algoritmo filtra el spam antes de que llegue a tu bandeja de entrada."},{en:"We need to <em>filter out</em> the candidates who don't meet the basic requirements.",es:"Necesitamos descartar a los candidatos que no cumplen los requisitos b\u00e1sicos."},{en:"I use noise-canceling headphones to <em>filter out</em> distractions.",es:"Uso aud\u00edfonos con cancelaci\u00f3n de ruido para filtrar las distracciones."}],tip:"'Filter out' = pasar por el filtro y sacar = eliminar lo no deseado.",extra:"'Filter in' = lo opuesto: incluir selectivamente. En an\u00e1lisis de datos: 'filter out outliers' = eliminar valores at\u00edpicos."},
+  {phrase:"chalk up",es:"atribuir / acumular / anotar un logro",register:"informal",context:"Se usa para registrar o atribuir un logro o resultado. Tambi\u00e9n para explicar la causa de algo con actitud positiva.",examples:[{en:"We can <em>chalk up</em> this quarter's success to better targeting.",es:"Podemos atribuir el \u00e9xito de este trimestre a una mejor segmentaci\u00f3n."},{en:"She's <em>chalked up</em> three promotions in four years \u2014 impressive.",es:"Ha acumulado tres ascensos en cuatro a\u00f1os \u2014 impresionante."},{en:"Let's just <em>chalk it up to</em> experience and move forward.",es:"Simplemente atribuy\u00e1moslo a la experiencia y avancemos."}],tip:"'Chalk up' = anotar con tiza en el pizarr\u00f3n = registrar un resultado o \u00e9xito.",extra:"'Chalk it up to experience' es muy \u00fatil para aceptar un fracaso con actitud positiva. Muy usada en ingl\u00e9s coloquial."},
+  {phrase:"knuckle down",es:"ponerse a trabajar en serio / aplicarse con determinaci\u00f3n",register:"informal",context:"Se usa cuando alguien necesita concentrarse y trabajar duro, especialmente despu\u00e9s de haber perdido tiempo.",examples:[{en:"The exams are next week \u2014 it's time to <em>knuckle down</em>.",es:"Los ex\u00e1menes son la pr\u00f3xima semana \u2014 es hora de ponerse a trabajar en serio."},{en:"We need to <em>knuckle down</em> and finish this by Friday.",es:"Necesitamos aplicarnos y terminarlo antes del viernes."},{en:"After months of delays, the team finally <em>knuckled down</em> and delivered.",es:"Despu\u00e9s de meses de retrasos, el equipo finalmente se puso serio y entreg\u00f3."}],tip:"'Knuckle down' = poner los nudillos sobre la mesa = concentrarse y trabajar con determinaci\u00f3n.",extra:"Originado del juego de canicas. Hoy implica esfuerzo serio y disciplinado."},
+  {phrase:"phase in",es:"introducir gradualmente / implementar por etapas",register:"formal",context:"Se usa cuando algo nuevo se introduce de forma progresiva y planificada, no de golpe. Lo opuesto de 'phase out'.",examples:[{en:"The new regulations will be <em>phased in</em> over the next three years.",es:"Las nuevas regulaciones se introducir\u00e1n gradualmente durante los pr\u00f3ximos tres a\u00f1os."},{en:"They're planning to <em>phase in</em> the new billing system starting in January.",es:"Planean implementar el nuevo sistema de facturaci\u00f3n progresivamente desde enero."},{en:"Remote work policies were <em>phased in</em> after the pandemic.",es:"Las pol\u00edticas de trabajo remoto se introdujeron gradualmente despu\u00e9s de la pandemia."}],tip:"'Phase in' = entrar por fases = introducir progresivamente. Par perfecto con 'phase out'.",extra:"'Phase in / phase out' es un par complementario muy \u00fatil en documentos de pol\u00edtica corporativa y tecnolog\u00eda."},
+  {phrase:"ink a deal",es:"cerrar un trato / firmar un acuerdo",register:"formal",context:"Se usa en contextos de negocios para indicar que un acuerdo ha sido firmado y formalizado. 'Ink' se usa como verbo (firmar con tinta).",examples:[{en:"The two companies finally <em>inked a deal</em> after months of negotiation.",es:"Las dos empresas finalmente cerraron un trato despu\u00e9s de meses de negociaci\u00f3n."},{en:"We're hoping to <em>ink a deal</em> with the distributor before the end of Q2.",es:"Esperamos cerrar un acuerdo con el distribuidor antes de fin del segundo trimestre."},{en:"The sponsorship agreement was <em>inked</em> just hours before the event.",es:"El acuerdo de patrocinio fue firmado pocas horas antes del evento."}],tip:"'Ink a deal' = firmar con tinta = formalizar un acuerdo. M\u00e1s v\u00edvido que 'sign a deal'.",extra:"Muy com\u00fan en titulares de negocios y noticias de M&A. Tambi\u00e9n: 'seal the deal' = cerrar el trato."}
+];
+
+// ── STORAGE HELPERS (localStorage con fallback a objeto en memoria) ──────────
+const _mem={};
+const store={
+  get(k){try{return localStorage.getItem(k)}catch(e){return _mem[k]||null}},
+  set(k,v){try{localStorage.setItem(k,v)}catch(e){_mem[k]=v}},
+};
+
+// ── SMART DAILY SYSTEM ───────────────────────────────────────────────────────
+const KEY_TODAY_DATE='ed_today_date';
+const KEY_TODAY_IDX='ed_today_idx';
+const KEY_SEEN='ed_seen';
+const KEY_QUEUE='ed_queue';
+
+function getState(){
+  const savedDate=store.get(KEY_TODAY_DATE);
+  const savedIdx=store.get(KEY_TODAY_IDX);
+  let seen=JSON.parse(store.get(KEY_SEEN)||'[]');
+  let queue=JSON.parse(store.get(KEY_QUEUE)||'[]');
+
+  if(savedDate===todayStr && savedIdx!==null){
+    return {idx:parseInt(savedIdx,10),seen,queue};
+  }
+
+  if(queue.length===0){
+    const remaining=[];
+    for(let i=0;i<phrasalData.length;i++){
+      if(!seen.includes(i)) remaining.push(i);
+    }
+    if(remaining.length===0){
+      seen=[];
+      for(let i=0;i<phrasalData.length;i++) remaining.push(i);
+    }
+    for(let i=remaining.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [remaining[i],remaining[j]]=[remaining[j],remaining[i]];
+    }
+    queue=remaining;
+  }
+
+  const idx=queue.shift();
+  seen.push(idx);
+  store.set(KEY_TODAY_DATE,todayStr);
+  store.set(KEY_TODAY_IDX,String(idx));
+  store.set(KEY_SEEN,JSON.stringify(seen));
+  store.set(KEY_QUEUE,JSON.stringify(queue));
+  return {idx,seen,queue};
+}
+
+const state=getState();
+const todayIdx=state.idx;
+const seenList=state.seen;
+const seenCount=seenList.length;
+const totalCount=phrasalData.length;
+const progressPct=Math.round((seenCount/totalCount)*100);
+
+function resetProgress(){
+  if(!confirm('¿Seguro que quieres reiniciar tu progreso? Comenzarás de nuevo desde cero.')) return;
+  store.set(KEY_SEEN,'[]');
+  store.set(KEY_QUEUE,'[]');
+  store.set(KEY_TODAY_DATE,'');
+  store.set(KEY_TODAY_IDX,'');
+  location.reload();
+}
+
+function renderPhrsal(item){
+  const regMap={informal:['Informal','badge-informal'],formal:['Formal','badge-formal'],neutro:['Neutro','badge-neutro']};
+  const [rl,rc]=regMap[item.register]||['Neutro','badge-neutro'];
+  return `
+    <div class="progress-bar-wrap">
+      <div class="progress-top">
+        <span class="progress-label">Tu progreso — ciclo actual</span>
+        <span class="progress-count">${seenCount} de ${totalCount} vistos</span>
+      </div>
+      <div class="progress-bg"><div class="progress-fill" style="width:${progressPct}%"></div></div>
+    </div>
+    <div class="day-meta">
+      ${DAYS_ES[now.getDay()]} ${now.getDate()} de ${MONTHS_ES[now.getMonth()]} · Phrasal verb #${seenCount} del ciclo<br>
+      No repetirás ninguno hasta ver los ${totalCount}.
+      <button class="reset-btn" onclick="resetProgress()">Reiniciar progreso</button>
+    </div>
+    <div class="card-header">
+      <div><div class="item-title">${item.phrase}</div><div class="item-subtitle">${item.es}</div></div>
+      <span class="badge ${rc}">${rl}</span>
+    </div>
+    <div class="section-label">Cuándo y cómo se usa</div>
+    <div class="context-box">${item.context}</div>
+    <div class="section-label">3 ejemplos reales</div>
+    <ul class="examples-list">
+      ${item.examples.map(e=>`<li class="example-item"><div class="example-en">${e.en}</div><div class="example-es">${e.es}</div></li>`).join('')}
+    </ul>
+    <div class="section-label">Truco para recordarlo</div>
+    <div class="tip-box">${item.tip}</div>
+    <div class="section-label">Detalle avanzado y matices</div>
+    <div class="compare-box">${item.extra}</div>
+  `;
+}
+document.getElementById('phrasal-card').innerHTML=renderPhrsal(phrasalData[todayIdx]);
+
+// ─── MODALS ─────────────────────────────────────────────────────────────────
+const modalData=[
+  {modal:'will',es:'Futuro / voluntad / promesa firme',prob:92,probLabel:'casi seguro',
+   compare:'El más directo para el futuro. "Going to" implica plan previo; "will" es decisión espontánea o predicción. "Shall" es su versión arcaica/formal.',
+   examples:[
+     {en:'I will send you the contract as soon as it\'s signed.',es:'Te enviaré el contrato en cuanto esté firmado.'},
+     {en:'Don\'t worry — it will be fine.',es:'No te preocupes — va a estar bien.'},
+     {en:'Will the client approve the proposal?',es:'¿El cliente aprobará la propuesta?'}
+   ],
+   ruleYes:'Promesas, predicciones, decisiones tomadas en el momento, hechos futuros casi seguros.',
+   ruleNo:'No para planes ya decididos con anticipación (usa "going to"). No para posibilidades inciertas (usa "might/may").'
+  },
+  {modal:'must',es:'Obligación fuerte / deducción lógica',prob:88,probLabel:'obligatorio / casi seguro',
+   compare:'"Must" = obligación interna o deducción. "Have to" = obligación externa (reglas, otros). CLAVE: "must not" = prohibición; "don\'t have to" = no es necesario (opuestos).',
+   examples:[
+     {en:'You must submit the report by 5 PM — the client is waiting.',es:'Debes entregar el informe antes de las 17h — el cliente está esperando.'},
+     {en:'She must be at home; her car is in the driveway.',es:'Debe estar en casa; su auto está en la entrada.'},
+     {en:'You must not share confidential data outside the company.',es:'No debes compartir datos confidenciales fuera de la empresa.'}
+   ],
+   ruleYes:'Obligaciones reales e importantes, deducción lógica muy segura, normas internas y reglamentos.',
+   ruleNo:'No para sugerencias ligeras. "Must not" ≠ "don\'t have to": el primero es prohibición, el segundo es opcional.'
+  },
+  {modal:'have to',es:'Obligación externa / necesidad impuesta',prob:85,probLabel:'obligatorio por reglas',
+   compare:'A diferencia de "must" (interno), "have to" = alguien o algo más impone la obligación. En el pasado se usa "had to" (must no tiene pasado propio).',
+   examples:[
+     {en:'I have to finish this before leaving — it\'s a compliance deadline.',es:'Tengo que terminar esto antes de irme — es un plazo de cumplimiento.'},
+     {en:'You don\'t have to attend every meeting — only the key ones.',es:'No tienes que asistir a todas las reuniones — solo a las clave.'},
+     {en:'She had to resubmit the form because it was incomplete.',es:'Tuvo que volver a presentar el formulario porque estaba incompleto.'}
+   ],
+   ruleYes:'Obligaciones impuestas por reglas, jefes, leyes o circunstancias. Muy útil en el pasado ("had to").',
+   ruleNo:'No confundas "don\'t have to" (no es necesario) con "must not" (está prohibido). Son opuestos.'
+  },
+  {modal:'should',es:'Recomendación / expectativa / consejo',prob:68,probLabel:'recomendable',
+   compare:'"Should" = más suave que "must". Expresa consejo, expectativa o lo correcto. "Ought to" es casi sinónimo pero más formal y moral. "Must" implica más urgencia.',
+   examples:[
+     {en:'You should get some sleep — you have a big presentation tomorrow.',es:'Deberías dormir un poco — mañana tienes una presentación importante.'},
+     {en:'The package should arrive by Thursday at the latest.',es:'El paquete debería llegar el jueves a más tardar.'},
+     {en:'Should I send the email now or wait until Monday?',es:'¿Debería enviar el correo ahora o esperar hasta el lunes?'}
+   ],
+   ruleYes:'Consejos, expectativas razonables, lo correcto según normas sociales o lógica.',
+   ruleNo:'No para certezas absolutas (usa "must"). No para capacidad (usa "can/could").'
+  },
+  {modal:'should have',es:'Debería haber (crítica / arrepentimiento pasado)',prob:65,probLabel:'recomendación pasada incumplida',
+   compare:'Forma perfecta de "should". Critica una acción pasada que no ocurrió o una que sí ocurrió y no debería. Muy usado para arrepentimiento y feedback.',
+   examples:[
+     {en:'You should have sent the report earlier — now it\'s too late.',es:'Deberías haber enviado el informe antes — ahora es demasiado tarde.'},
+     {en:'I should have backed up the files before the update.',es:'Debería haber hecho una copia de seguridad antes de la actualización.'},
+     {en:'She shouldn\'t have shared that data without approval.',es:'No debería haber compartido esos datos sin aprobación.'}
+   ],
+   ruleYes:'Críticas constructivas sobre el pasado, expresar arrepentimiento, feedback sobre decisiones incorrectas.',
+   ruleNo:'No lo uses en exceso en feedback — puede sonar agresivo. Complementa con "next time, try to..." para suavizarlo.'
+  },
+  {modal:'could',es:'Posibilidad / capacidad pasada / sugerencia educada',prob:48,probLabel:'posible / condicional',
+   compare:'"Could" = pasado de "can", sugerencia tentativa o posibilidad. Más educado que "can" para pedir algo. "Could you...?" es más cortés que "Can you...?" en contextos formales.',
+   examples:[
+     {en:'Could you send me the updated version of the file?',es:'¿Podrías enviarme la versión actualizada del archivo?'},
+     {en:'We could reschedule the meeting if Thursday doesn\'t work.',es:'Podríamos reprogramar la reunión si el jueves no funciona.'},
+     {en:'She could speak three languages by the time she was 20.',es:'Ella podía hablar tres idiomas cuando tenía 20 años.'}
+   ],
+   ruleYes:'Peticiones educadas, sugerencias, capacidad en el pasado, posibilidades condicionales.',
+   ruleNo:'No para certezas futuras. "Couldn\'t" en el pasado ≠ "can\'t" en el presente (cambia el matiz).'
+  },
+  {modal:'could have',es:'Podría haber (posibilidad pasada no realizada)',prob:42,probLabel:'posibilidad pasada perdida',
+   compare:'Forma perfecta de "could". Expresa una posibilidad que existía en el pasado pero no se aprovechó. También para crítica más suave que "should have".',
+   examples:[
+     {en:'You could have asked me — I was right there.',es:'Podrías haberme preguntado — estaba justo ahí.'},
+     {en:'The project could have been finished on time with better planning.',es:'El proyecto podría haber terminado a tiempo con mejor planificación.'},
+     {en:'She could have taken the job, but she chose to stay.',es:'Ella podría haber tomado el trabajo, pero eligió quedarse.'}
+   ],
+   ruleYes:'Oportunidades no aprovechadas, especulación sobre el pasado, crítica más suave y abierta que "should have".',
+   ruleNo:'No lo uses cuando la acción era obligatoria — ahí usa "should have". "Could have" abre opciones; "should have" las cierra con juicio.'
+  },
+  {modal:'would',es:'Condicional / hábito pasado / petición educada',prob:62,probLabel:'hipotético / habitual pasado',
+   compare:'"Would" = condicional por excelencia. También expresa hábito pasado (lo que solías hacer). "Will" es futuro cierto; "would" implica condición o hipótesis.',
+   examples:[
+     {en:'I would travel more if I had more vacation days.',es:'Viajaría más si tuviera más días de vacaciones.'},
+     {en:'Would you like to review the proposal before the meeting?',es:'¿Le gustaría revisar la propuesta antes de la reunión?'},
+     {en:'When I was a student, I would study at the library every evening.',es:'Cuando era estudiante, solía estudiar en la biblioteca todas las tardes.'}
+   ],
+   ruleYes:'Condicionales, solicitudes educadas, hipótesis, hábitos del pasado con "when/whenever".',
+   ruleNo:'No para promesas firmes (usa "will"). No para estados en el pasado: "I would be happy then" es incorrecto — usa "used to be" o "was".'
+  },
+  {modal:'would have',es:'Habría (condicional pasado / consecuencia irreal)',prob:55,probLabel:'hipótesis pasada no realizada',
+   compare:'Resultado del condicional tipo 3. Expresa qué habría pasado si algo hubiera sido diferente. Par inseparable con "if + had + past participle" (condicional tipo 3).',
+   examples:[
+     {en:'If I had known, I would have called you immediately.',es:'Si lo hubiera sabido, te habría llamado de inmediato.'},
+     {en:'We would have finished on time if we\'d had more resources.',es:'Habríamos terminado a tiempo si hubiéramos tenido más recursos.'},
+     {en:'She would have gotten the job, but she arrived late to the interview.',es:'Ella habría conseguido el trabajo, pero llegó tarde a la entrevista.'}
+   ],
+   ruleYes:'Consecuencias de situaciones pasadas hipotéticas, expresar lo que habría ocurrido bajo otras circunstancias.',
+   ruleNo:'No mezcles tiempos: "If I would have known" → ERROR. La cláusula con "if" usa "had + past participle", nunca "would have".'
+  },
+  {modal:'may',es:'Permiso formal / posibilidad real',prob:50,probLabel:'posible / mitad-mitad',
+   compare:'"May" es más formal que "might". Para pedir permiso en contextos formales, "may" suena más educado. Para posibilidad, "may" y "might" son casi sinónimos.',
+   examples:[
+     {en:'May I ask you a quick question about the contract?',es:'¿Podría hacerle una pregunta rápida sobre el contrato?'},
+     {en:'The project may be delayed due to supply chain issues.',es:'El proyecto puede retrasarse por problemas en la cadena de suministro.'},
+     {en:'She may not be available this afternoon — check her calendar.',es:'Puede que no esté disponible esta tarde — revisa su calendario.'}
+   ],
+   ruleYes:'Permiso formal, posibilidad real e incierta, comunicación escrita y profesional.',
+   ruleNo:'No en conversaciones muy informales (suena rígido). Para pedir permiso casual, usa "can" o "could".'
+  },
+  {modal:'might',es:'Tal vez / posibilidad baja / incertidumbre',prob:32,probLabel:'poco probable / incierto',
+   compare:'"Might" indica menor probabilidad que "may". También es el pasado de "may" en oraciones indirectas: "She said she might come" (de "I may come").',
+   examples:[
+     {en:'I might work from home tomorrow if the traffic is bad.',es:'Podría trabajar desde casa mañana si el tráfico está mal.'},
+     {en:'He might have missed the email — send it again.',es:'Puede que se haya perdido el correo — mándalo de nuevo.'},
+     {en:'This approach might not work, but it\'s worth trying.',es:'Este enfoque podría no funcionar, pero vale la pena intentarlo.'}
+   ],
+   ruleYes:'Posibilidades inciertas o poco probables, sugerencias tentativas, hipótesis, reportar lo que otros dijeron.',
+   ruleNo:'No cuando la probabilidad es alta (usa "should" o "will"). Evítalo en instrucciones directas.'
+  },
+  {modal:'ought to',es:'Debería / obligación moral / ético',prob:65,probLabel:'esperable / deber moral',
+   compare:'"Ought to" ≈ "should", pero más moral o ético. Más común en inglés británico. En negativo moderno, prefiere "shouldn\'t" sobre "oughtn\'t to".',
+   examples:[
+     {en:'You ought to apologize — it was clearly your mistake.',es:'Deberías disculparte — fue claramente tu error.'},
+     {en:'The results ought to be ready by now — let me check.',es:'Los resultados deberían estar listos ya — déjame verificar.'},
+     {en:'We ought to review our policies at least once a year.',es:'Deberíamos revisar nuestras políticas al menos una vez al año.'}
+   ],
+   ruleYes:'Deberes morales o éticos, expectativas razonables, recomendaciones formales o escritas.',
+   ruleNo:'Evítalo en conversaciones muy informales — puede sonar anticuado. Prefiere "should" en contextos casuales.'
+  }
+];
+
+function renderModalGrid(){
+  const grid=document.getElementById('modal-grid');
+  grid.innerHTML=modalData.map((m,i)=>`
+    <div class="modal-row" id="mrow-${i}">
+      <div class="modal-row-header" onclick="toggleModal(${i})">
+        <div class="modal-name">${m.modal}</div>
+        <div class="modal-es">${m.es}</div>
+        <div class="modal-prob-wrap">
+          <div class="modal-prob-num">${m.prob}% · ${m.probLabel}</div>
+          <div class="modal-bar-bg"><div class="modal-bar-fill" style="width:${m.prob}%"></div></div>
+        </div>
+        <div class="modal-chevron">▼</div>
+      </div>
+      <div class="modal-detail">
+        <div class="prob-label-row"><span>Improbable</span><strong>${m.probLabel}</strong><span>Seguro</span></div>
+        <div class="full-bar-bg"><div class="full-bar-fill" style="width:${m.prob}%"></div></div>
+        <div class="section-label" style="margin-top:.5rem;">Diferencia clave con modales similares</div>
+        <div class="compare-box">${m.compare}</div>
+        <div class="section-label">Ejemplos</div>
+        <ul class="examples-list">
+          ${m.examples.map(e=>`<li class="example-item"><div class="example-en">${e.en}</div><div class="example-es">${e.es}</div></li>`).join('')}
+        </ul>
+        <div class="rule-grid">
+          <div class="rule-card rule-si"><strong>Úsalo cuando...</strong>${m.ruleYes}</div>
+          <div class="rule-card rule-no"><strong>Evítalo cuando...</strong>${m.ruleNo}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+renderModalGrid();
+
+function toggleModal(i){
+  const row=document.getElementById('mrow-'+i);
+  row.classList.toggle('open');
+}
+
+// ─── TENSES & CONDITIONALS ──────────────────────────────────────────────────
+const tenseData=[
+  {name:'Present Simple',formula:'Subject + base verb (+ -s / -es para he/she/it)',
+   rules:[
+     {rule:'Hábitos y rutinas regulares',ex:'She checks her email every morning.'},
+     {rule:'Hechos y verdades universales',ex:'Water boils at 100°C.'},
+     {rule:'Horarios fijos (transporte, programas)',ex:'The flight departs at 8 AM.'}
+   ],
+   table:[
+     {tipo:'Afirmativa',en:'He works in finance.',es:'Trabaja en finanzas.'},
+     {tipo:'Negativa',en:'He doesn\'t work on weekends.',es:'No trabaja los fines de semana.'},
+     {tipo:'Pregunta',en:'Does he work remotely?',es:'¿Trabaja en remoto?'}
+   ],
+   errors:['Olvidar la -s en tercera persona singular: "She work here" → "She works here".','Confundirlo con presente continuo para hábitos: "I am eating lunch every day" → "I eat lunch every day".','Agregar -s al auxiliar en negativas: "She doesn\'t works" → "She doesn\'t work".'],
+   anchor:'Equivale al presente simple español ("Ella trabaja"). En inglés su uso para hábitos es más estricto — no se mezcla con el continuo como en español.',
+   conditionals:null
+  },
+  {name:'Present Continuous',formula:'Subject + am/is/are + verb-ing',
+   rules:[
+     {rule:'Acción en progreso exactamente ahora',ex:'I\'m writing a report right now.'},
+     {rule:'Situación temporal (no permanente)',ex:'She\'s staying at her sister\'s place this week.'},
+     {rule:'Plan futuro ya organizado',ex:'We\'re meeting the client on Thursday.'}
+   ],
+   table:[
+     {tipo:'Afirmativa',en:'They are reviewing the contract.',es:'Están revisando el contrato.'},
+     {tipo:'Negativa',en:'They aren\'t making progress.',es:'No están avanzando.'},
+     {tipo:'Pregunta',en:'Are they still working on it?',es:'¿Todavía están trabajando en eso?'}
+   ],
+   errors:['Usarlo con stative verbs: "I am knowing the answer" → "I know the answer".','Olvidar el auxiliar: "She working now" → "She is working now".','Confundirlo con Simple para rutinas: "I am waking up at 7 every day" → "I wake up at 7 every day".'],
+   anchor:'Similar al español "estar + gerundio" ("Estoy trabajando"). Diferencia clave: en inglés NO con verbos de estado (know, love, believe, want, prefer, need, etc.).',
+   conditionals:null
+  },
+  {name:'Present Perfect',formula:'Subject + have/has + past participle',
+   rules:[
+     {rule:'Experiencia de vida (sin tiempo específico)',ex:'I\'ve visited Japan twice.'},
+     {rule:'Acción reciente con resultado presente',ex:'She has just sent the email.'},
+     {rule:'Acción que empezó en el pasado y continúa',ex:'We have worked together for five years.'}
+   ],
+   table:[
+     {tipo:'Afirmativa',en:'I\'ve finished the proposal.',es:'He terminado la propuesta.'},
+     {tipo:'Negativa',en:'I haven\'t received a reply yet.',es:'Todavía no he recibido respuesta.'},
+     {tipo:'Pregunta',en:'Have you ever led a team?',es:'¿Alguna vez has liderado un equipo?'}
+   ],
+   errors:['Usarlo con tiempo específico: "I have called her yesterday" → "I called her yesterday" (Past Simple).','Usar "have" con tercera persona: "She have worked" → "She has worked".','Traducirlo directamente del español: en inglés NUNCA va con "ayer", "el lunes pasado", "en 2020".'],
+   anchor:'El pretérito perfecto español ("He comido") existe, pero su uso difiere. Piénsalo como conexión entre pasado y presente — sin fecha concreta.',
+   conditionals:null
+  },
+  {name:'Past Simple',formula:'Subject + past form (verb-ed o forma irregular)',
+   rules:[
+     {rule:'Acción completada en tiempo específico',ex:'She called me yesterday morning.'},
+     {rule:'Serie de eventos pasados en orden',ex:'He opened the laptop, logged in, and started the meeting.'},
+     {rule:'Hábito o estado pasado que ya no existe',ex:'I worked in advertising for three years.'}
+   ],
+   table:[
+     {tipo:'Afirmativa',en:'The team launched the product in March.',es:'El equipo lanzó el producto en marzo.'},
+     {tipo:'Negativa',en:'We didn\'t launch it on time.',es:'No lo lanzamos a tiempo.'},
+     {tipo:'Pregunta',en:'Did you attend the conference?',es:'¿Asististe a la conferencia?'}
+   ],
+   errors:['Usar Present Perfect con tiempo específico: "I have seen him last week" → "I saw him last week".','Verbos irregulares sin memorizar: "I goed" → "I went"; "She thinked" → "She thought".','Agregar -ed al auxiliar: "She didn\'t worked" → "She didn\'t work".'],
+   anchor:'Similar al pretérito indefinido español ("Ella llamó", "Él fue"). La clave: en inglés, cualquier tiempo específico del pasado → Past Simple, sin excepciones.',
+   conditionals:null
+  },
+  {name:'Past Perfect',formula:'Subject + had + past participle',
+   rules:[
+     {rule:'Acción anterior a otra acción pasada',ex:'By the time I arrived, the meeting had already started.'},
+     {rule:'Causa de algo que ocurrió en el pasado',ex:'She was exhausted because she had worked all night.'},
+     {rule:'Condicional tipo 3 (hipótesis pasada)',ex:'If he had arrived on time, we would have caught the flight.'}
+   ],
+   table:[
+     {tipo:'Afirmativa',en:'He had already left when I called.',es:'Ya se había ido cuando llamé.'},
+     {tipo:'Negativa',en:'I hadn\'t seen that report before.',es:'No había visto ese informe antes.'},
+     {tipo:'Pregunta',en:'Had you ever managed a team before?',es:'¿Habías liderado un equipo antes?'}
+   ],
+   errors:['Usarlo en exceso: si el orden es claro por contexto, Past Simple es suficiente.','Confundirlo con Present Perfect: "I had finished it yesterday" → "I finished it yesterday".','Usar "have" en vez de "had": "She have finished before I arrived" → "She had finished".'],
+   anchor:'Equivale al pluscuamperfecto español ("Había terminado", "Ya se había ido"). Ambos marcan "lo más antiguo en el pasado". En inglés se usa de forma casi idéntica.',
+   conditionals:null
+  },
+  {name:'Future Simple (will)',formula:'Subject + will + base verb',
+   rules:[
+     {rule:'Predicciones sin evidencia presente',ex:'I think electric cars will dominate by 2040.'},
+     {rule:'Decisiones espontáneas tomadas en el momento',ex:'The printer\'s out of paper — I\'ll get more.'},
+     {rule:'Promesas y ofrecimientos',ex:'I\'ll help you with the slides, don\'t worry.'}
+   ],
+   table:[
+     {tipo:'Afirmativa',en:'The policy will take effect next month.',es:'La política entrará en vigor el próximo mes.'},
+     {tipo:'Negativa',en:'This won\'t be easy, but we\'ll manage.',es:'No será fácil, pero lo manejaremos.'},
+     {tipo:'Pregunta',en:'Will the client approve the proposal?',es:'¿El cliente aprobará la propuesta?'}
+   ],
+   errors:['Usarlo para planes ya decididos: usa "going to" o Present Continuous para eso.','Agregar -s a "will": "She wills go" → "She will go".','Confundirlo con "would" en condicionales: "If it rains, I will stay" es correcto; "If I were rich, I would travel" usa "would".'],
+   anchor:'El futuro más directo en inglés. En español: "Ayudaré", "Llegará". La distinción "will" vs "going to" no existe en español — es exclusiva del inglés.',
+   conditionals:null
+  },
+  {name:'Condicionales: tipos 1, 2 y 3',formula:'',
+   rules:[],table:[],errors:[],anchor:'',
+   conditionals:{
+     blocks:[
+       {
+         title:'Tipo 1 — Condicional real (presente/futuro probable)',
+         formula:'If + Present Simple → will + base verb',
+         desc:'Situación posible o probable. Puede ocurrir realmente.',
+         examples:[
+           {en:'If you send the report today, I will review it before the meeting.',es:'Si envías el informe hoy, lo revisaré antes de la reunión.'},
+           {en:'If it rains tomorrow, we will postpone the outdoor event.',es:'Si llueve mañana, pospondremos el evento al aire libre.'},
+           {en:'If she doesn\'t reply by 5 PM, I will call her directly.',es:'Si no responde antes de las 5 PM, la llamaré directamente.'}
+         ]
+       },
+       {
+         title:'Tipo 2 — Condicional irreal (presente/futuro hipotético)',
+         formula:'If + Past Simple → would + base verb',
+         desc:'Situación hipotética o poco probable en el presente. No es la realidad actual.',
+         examples:[
+           {en:'If I had more time, I would learn a third language.',es:'Si tuviera más tiempo, aprendería un tercer idioma.'},
+           {en:'If she were the manager, she would restructure the whole team.',es:'Si ella fuera la gerente, reestructuraría a todo el equipo.'},
+           {en:'What would you do if the company offered you a transfer abroad?',es:'¿Qué harías si la empresa te ofreciera un traslado al exterior?'}
+         ]
+       },
+       {
+         title:'Tipo 3 — Condicional pasado irreal (could/should/would have)',
+         formula:'If + had + past participle → would/could/should + have + past participle',
+         desc:'Hipótesis sobre algo que NO ocurrió en el pasado. Arrepentimiento, crítica o especulación sobre el pasado.',
+         examples:[
+           {en:'If I had known about the meeting, I would have prepared a presentation.',es:'Si hubiera sabido de la reunión, habría preparado una presentación.'},
+           {en:'If we had started earlier, we could have avoided the delays.',es:'Si hubiéramos empezado antes, podríamos haber evitado los retrasos.'},
+           {en:'If she had asked for feedback, she should have received it sooner.',es:'Si hubiera pedido retroalimentación, debería haberla recibido antes.'}
+         ]
+       },
+       {
+         title:'Tipo mixto — Pasado → presente (efecto que persiste)',
+         formula:'If + had + past participle → would + base verb (now)',
+         desc:'La causa fue en el pasado, pero la consecuencia afecta el presente.',
+         examples:[
+           {en:'If I had studied medicine, I would be a doctor now.',es:'Si hubiera estudiado medicina, sería médico ahora.'},
+           {en:'If they had invested in that startup, they would be millionaires today.',es:'Si hubieran invertido en esa startup, serían millonarios hoy.'},
+           {en:'If she hadn\'t quit that job, she would still be working there.',es:'Si no hubiera renunciado a ese trabajo, todavía estaría trabajando allí.'}
+         ]
+       }
+     ],
+     errors:[
+       '"If I would have known" → ERROR grave y muy común. La cláusula con "if" usa "had + past participle", NUNCA "would have".',
+       '"If she would be here" → ERROR. Tipo 2: usa Past Simple en la cláusula "if": "If she were here".',
+       'Mezclar tipos: "If I had more time, I will travel" → elige un tipo y mantén la coherencia de tiempos.',
+       'Olvidar "were" para todos los sujetos en tipo 2: "If I was you" (informal) → "If I were you" (correcto formal).'
+     ],
+     anchor:'En español los condicionales se manejan de forma muy similar: "Si hubiera sabido..." / "habría ido...". La trampa es el tipo 3 en inglés: la gente traduce mal "would have" y lo pone en la cláusula "if", lo cual es un error clásico.'
+   }
+  }
+];
+
+let currentTense=0;
+
+function renderTenseNav(){
+  const nav=document.getElementById('tense-nav');
+  nav.innerHTML=tenseData.map((t,i)=>`
+    <button class="tense-nav-btn${i===currentTense?' active':''}" onclick="selectTense(${i})">${t.name}</button>
+  `).join('');
+}
+
+function selectTense(i){
+  currentTense=i;
+  renderTenseNav();
+  renderTenseCard();
+}
+
+function renderTenseCard(){
+  const t=tenseData[currentTense];
+  const card=document.getElementById('tense-card');
+  if(t.conditionals){
+    const {blocks,errors,anchor}=t.conditionals;
+    card.innerHTML=`
+      <div class="card-header"><div><div class="item-title" style="font-size:1.6rem;">Condicionales en inglés</div><div class="item-subtitle">Tipos 1, 2, 3 y mixto · could, should, would have</div></div></div>
+      ${blocks.map(b=>`
+        <div class="cond-section">
+          <div class="section-label">${b.title}</div>
+          <div class="cond-formula">${b.formula}</div>
+          <div class="context-box" style="margin-bottom:.75rem;">${b.desc}</div>
+          <ul class="examples-list">
+            ${b.examples.map(e=>`<li class="example-item"><div class="example-en">${e.en}</div><div class="example-es">${e.es}</div></li>`).join('')}
+          </ul>
+        </div>
+      `).join('<div class="divider" style="height:1px;background:var(--border);margin:1.5rem 0;"></div>')}
+      <div class="section-label" style="margin-top:1.5rem;">Errores clásicos de hispanohablantes</div>
+      <ul class="error-list">${errors.map(e=>`<li class="error-item"><span class="error-icon">✗</span><span>${e}</span></li>`).join('')}</ul>
+      <div class="section-label">Conector con el español</div>
+      <div class="anchor-box">${anchor}</div>
+    `;
+  } else {
+    card.innerHTML=`
+      <div class="card-header"><div><div class="item-title" style="font-size:1.75rem;">${t.name}</div></div></div>
+      <div class="section-label">Fórmula</div>
+      <div class="formula-box">${t.formula}</div>
+      <div class="section-label">Cuándo se usa</div>
+      <ul class="examples-list">${t.rules.map(r=>`<li class="example-item"><div class="example-en" style="font-weight:400;">${r.rule}</div><div class="example-es" style="font-style:italic;">${r.ex}</div></li>`).join('')}</ul>
+      <div class="section-label">Afirmativa · Negativa · Pregunta</div>
+      <div style="overflow-x:auto;border-radius:10px;border:1px solid var(--border);">
+        <table class="tense-table">
+          <thead><tr><th style="width:80px;">Tipo</th><th>Inglés</th><th>Español</th></tr></thead>
+          <tbody>${t.table.map(r=>`<tr><td>${r.tipo}</td><td>${r.en}</td><td style="color:var(--muted);font-size:.82rem;">${r.es}</td></tr>`).join('')}</tbody>
+        </table>
+      </div>
+      <div class="section-label">Errores comunes de hispanohablantes</div>
+      <ul class="error-list">${t.errors.map(e=>`<li class="error-item"><span class="error-icon">✗</span><span>${e}</span></li>`).join('')}</ul>
+      <div class="section-label">Conector con el español</div>
+      <div class="anchor-box">${t.anchor}</div>
+    `;
+  }
+}
+
+renderTenseNav();
+renderTenseCard();
+</script>
+
+<script>
+// Register service worker for offline support
+if ('serviceWorker' in navigator) {
+  const swCode = `
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open('english-daily-v1').then(cache =>
+      cache.addAll([location.href])
+    )
+  );
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(self.clients.claim());
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match(e.request)))
+  );
+});
+`;
+  const blob = new Blob([swCode], {type: 'application/javascript'});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+
+// Add Web App Manifest dynamically
+const manifest = {
+  name: "English Daily",
+  short_name: "English Daily",
+  description: "Phrasal verbs, modales y tiempos verbales en inglés",
+  start_url: location.href,
+  display: "standalone",
+  background_color: "#F7F5F0",
+  theme_color: "#1A1714",
+  orientation: "portrait",
+  icons: [{
+    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231A1714'/%3E%3Ctext x='50' y='68' font-size='52' text-anchor='middle' fill='%23A8C5B5' font-family='Georgia,serif' font-style='italic'%3EE%3C/text%3E%3C/svg%3E",
+    sizes: "any",
+    type: "image/svg+xml"
+  }]
+};
+const mblob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+const murl = URL.createObjectURL(mblob);
+const link = document.createElement('link');
+link.rel = 'manifest';
+link.href = murl;
+document.head.appendChild(link);
+</script>
+</body>
+</html>
